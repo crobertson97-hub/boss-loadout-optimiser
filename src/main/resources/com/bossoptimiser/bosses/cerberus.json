@@ -1,0 +1,59 @@
+{
+	"schema": 1,
+	"id": "cerberus",
+	"name": "Cerberus",
+	"category": "SLAYER",
+	"wikiUrl": "https://oldschool.runescape.wiki/w/Cerberus",
+	"dataSource": "Monster statistics: OSRS Wiki via bundled monsters.json. Strategy notes: OSRS Wiki Cerberus/Strategies.",
+	"dataVersion": "2026-11-19",
+	"validationStatus": "VALIDATED",
+	"validationNotes": "Single-phase fight. Demonbane weapons and the slayer helmet are covered by the reference validation tests. Cerberus can only be fought on a hellhound or Cerberus task, so the slayer-task bonus is always assumed.",
+	"groupSizes": ["SOLO"],
+	"slayerTaskRelevant": true,
+	"slayerTaskOnly": true,
+	"requirements": [
+		{"type": "SKILL", "skill": "slayer", "level": 91, "text": "91 Slayer"},
+		{"type": "NOTE", "text": "Requires an active hellhound or Cerberus slayer task"}
+	],
+	"warnings": [
+		"The summoned souls drain prayer heavily: the planner adds extra prayer restoration."
+	],
+	"damageTaken": {"magic": 0.34, "ranged": 0.33, "stab": 0.33},
+	"variants": [
+		{
+			"id": "standard",
+			"name": "Standard",
+			"phases": [{"id": "main", "name": "Cerberus", "monsterId": 5862}]
+		}
+	],
+	"strategies": [
+		{
+			"id": "melee",
+			"name": "Melee",
+			"description": "Crush or demonbane weapons in melee range.",
+			"phaseStyles": {"main": "MELEE"},
+			"phaseWeights": {"main": 1.0},
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Melee boost"},
+				{"category": "PRAYER", "slots": {"SHORT": 4, "NORMAL": 6, "LONG": 8}, "mandatory": true, "reason": "Soul phase prayer drain"},
+				{"category": "BOSS_TELEPORT", "family": "key_master_teleport", "slots": 1, "reason": "Fast return"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		},
+		{
+			"id": "ranged",
+			"name": "Ranged",
+			"description": "Ranged from a distance; the twisted bow benefits from Cerberus' high Magic level.",
+			"phaseStyles": {"main": "RANGED"},
+			"phaseWeights": {"main": 1.0},
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Ranged boost"},
+				{"category": "PRAYER", "slots": {"SHORT": 4, "NORMAL": 6, "LONG": 8}, "mandatory": true, "reason": "Soul phase prayer drain"},
+				{"category": "BOSS_TELEPORT", "family": "key_master_teleport", "slots": 1, "reason": "Fast return"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		}
+	]
+}

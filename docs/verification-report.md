@@ -1,0 +1,73 @@
+# Feature verification report
+
+Date: 2026-11-19 · JDK 21.0.11 targeting Java 11 · Gradle 8.10 · RuneLite client 1.13.7 · Windows 11
+
+**Read this first.** "Working" below means *implemented and covered by an automated test that passed on
+this machine*. It does **not** mean "seen working in the game": no part of this plugin has been run inside a
+logged-in client. A live launch was attempted and is blocked by the network this was built on (see the first
+row). Everything that needs the game is listed under [Needs manual in-game testing](#needs-manual-in-game-testing).
+
+## Build and test results
+
+```
+powershell -ExecutionPolicy Bypass -File scripts\build.ps1   ->  BUILD SUCCESSFUL
+116 tests, 0 failures, 0 errors, 0 skipped                   (build\reports\tests\test\index.html)
+build\libs\boss-loadout-optimiser-1.0.0.jar                  (about 600 kB)
+```
+
+| Test class | Tests |
+|---|---|
+| `combat.ReferenceValidationTest` (86 loadouts vs the OSRS Wiki DPS calculator) | 3 |
+| `combat.BasicRollsTest` | 5 |
+| `combat.MechanicsTest` | 11 |
+| `data.BundledDataTest` | 11 |
+| `bank.OwnedItemsTrackerTest` | 8 |
+| `account.EligibilityCheckerTest` | 8 |
+| `optimiser.GearOptimiserTest` | 19 |
+| `inventory.InventoryPlannerTest` | 11 |
+| `tiles.TilePackTest` | 13 |
+| `profiles.ProfileStoreTest` | 8 |
+| `upgrades.UpgradeAdviserTest` | 5 |
+| `ServiceIntegrationTest` | 9 |
+| `PluginLifecycleTest` | 2 |
+| `ui.PanelSmokeTest` | 2 |
+| `ui.PanelRenderTest` | 1 |
+
+## Feature status
+
+| Feature | Status | Evidence |
+|---|---|---|
+| **RuneLite startup** | **Blocked (network) / Untested live.** Start-up wiring: Working | `gradlew run` was executed: the development JVM started, `BossOptimiserPluginTest.main` ran and RuneLite began loading, then RuneLite's own `ClientLoader` failed with HTTP 403 from `api.runelite.net`, `static.runelite.net` and `oldschool.runescape.com` (the work network blocks them), so the client never reached plugin start-up. Substitute evidence: `PluginLifecycleTest` runs the real plugin class against a mocked client — sidebar button and both overlays are registered on `startUp` and removed on `shutDown`. |
+| **Bank analysis** | Working (logic) · Untested live | `OwnedItemsTrackerTest`, `PluginLifecycleTest.loginReadsTheAccountAndTheBankIsStoredPerAccount` (container read, noted items, placeholders, per-account persistence), `ServiceIntegrationTest.accountsAreKeptApart`, restart restore in `profilesSurviveARestartAndRestoreTheSavedSetup`. Not verified: that the live client fires the container events as assumed. |
+| **Account capability** | Working (logic) · Untested live | `EligibilityCheckerTest`; requirement data integrity in `BundledDataTest`. Coverage is deliberately partial (about 290 items); everything else is "unknown". Quest/level reads on the real client thread are untested. |
+| **Equipment optimisation** | Working | `GearOptimiserTest` (19): optimum cannot be improved by any single-slot swap; set effects; ammunition; two-handed; locks/exclusions; all five priorities; hybrid switches; deterministic; every item in the game owned at once completes in well under a second. |
+| **DPS calculations** | Working for the supported mechanics | `ReferenceValidationTest`: 86 of 86 scenarios equal the wiki calculator (rolls and max hit exactly, accuracy/DPS to 9 significant figures). Unsupported mechanics are flagged as estimates (`MechanicsTest`). |
+| **Inventory planning** | Working | `InventoryPlannerTest` (11), `ServiceIntegrationTest.inventoryPreferencesLocksAndExclusions`. Templates are per-boss heuristics; no kills-per-trip model. |
+| **Boss tile packs** | Working (logic) · Untested live | `TilePackTest` (13): JSON is readable by RuneLite's own Gson; append-only install, undo, failure handling; 8 bundled packs with provenance. **No pack is bundled for Vorkath or Cerberus** (no verified source). Not verified: Ground Markers showing installed markers in game. |
+| **Bank highlighting** | Working (model) · **Untested (rendering)** | `WithdrawList` logic in `UpgradeAdviserTest.withdrawListTracksWhatIsCarriedBankedAndMissing` and `ServiceIntegrationTest.fullJourneyFromBankToHighlights`; overlay registration in `PluginLifecycleTest`. The overlay drawing itself (`BankHighlightOverlay`, `MissingItemsOverlay`) has never been rendered in a client. |
+| **Saved profiles** | Working (logic) · Untested live | `ProfileStoreTest` (8), `ServiceIntegrationTest.profilesSurviveARestartAndRestoreTheSavedSetup` (new service over the same stored config). Not verified against a real RuneLite restart. |
+| **Upgrade recommendations** | Working (logic) · Untested with real prices | `UpgradeAdviserTest` (5) with a fake market; `ServiceIntegrationTest.upgradesNeedABaselineAndPrices`. Real prices come from `ItemManager` and have not been exercised. |
+| **Sidebar UI** | Renders headless · **Untested live** | `PanelSmokeTest` drives the real panel through every state; `PanelRenderTest` writes real off-screen renders of all seven pages at 225 px to `build/ui-preview/`. Look and feel inside the client (RuneLite's dark theme, item icons, dialogs, clipboard) is untested. |
+| **Plugin Hub compliance** | Reviewed by the author · **Needs maintainer review** | `docs/plugin-hub-compliance.md`; a scan of `src/main` for reflection, processes, file/network I/O, input injection, `Thread.sleep`, `new Gson()` and `log.info` found no matches. Five questions for maintainers are listed there. Not submitted. |
+
+## Needs manual in-game testing
+
+Do these on a network that allows the game, following `docs/local-setup.md` §5:
+
+1. The client starts with the plugin and the sidebar opens.
+2. Logging in shows your name and levels; opening the bank updates the snapshot; quest requirements show your real state.
+3. Optimised gear matches <https://tools.runescape.wiki/osrs-dps/> for the same inputs (spot-check two setups).
+4. Items marked "unverified" are really equippable by your account.
+5. Bank overlay: outlines, colours, quantity text and the missing-items list look right; nothing moves or is withdrawn.
+6. Tile packs: Copy JSON + Ground Markers import; "Add to Ground Markers…" then reload the area; "Undo install".
+7. Save a profile, restart RuneLite, load it; check a second account has its own list.
+8. Upgrade prices look sane and say when they were read.
+9. No stutter while optimising with your real bank; no errors in `~/.runelite/logs/client.log`.
+
+## Known gaps (not bugs, but not done)
+
+- Requirement data covers common PvM gear only; prayer unlocks are assumed from Prayer level.
+- No ancient/Arceuus spell selection, special attacks, minions, or group damage sharing.
+- Zulrah and Muspah phase weights are assumptions.
+- No bundled tile packs for Vorkath or Cerberus.
+- The project has no git commits and no remote yet; nothing has been submitted anywhere.

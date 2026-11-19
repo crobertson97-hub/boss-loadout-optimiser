@@ -1,0 +1,4572 @@
+{
+	"meta": {
+		"generated": "2026-11-19",
+		"reference": "OSRS Wiki DPS calculator (https://github.com/weirdgloop/osrs-dps-calc)",
+		"referenceCommit": "3da927f4280c73154fa59e4e90eb374af5123d32",
+		"note": "Reference figures only. Produced by running the calculator on the scenarios in scripts/reference/gen-scenarios.mjs."
+	},
+	"scenarios": [
+		{
+			"id": "m01-whip-only-abyssal-demon",
+			"monsterId": 415,
+			"monsterName": "Abyssal demon (Standard)",
+			"monsterCurrentHp": 150,
+			"equipment": {
+				"weapon": 4151
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Flick",
+				"type": "slash",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 16060,
+				"npcDefRoll": 12096,
+				"accuracy": 0.6233733889546105,
+				"maxHit": 24,
+				"expectedHit": 7.50541560301351,
+				"attackSpeed": 4,
+				"dps": 3.1272565012556295
+			}
+		},
+		{
+			"id": "m02-dhl-torva-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 22978,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Lunge",
+				"type": "stab",
+				"stance": "Controlled"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 38880,
+				"npcDefRoll": 20070,
+				"accuracy": 0.7418790668964276,
+				"maxHit": 60,
+				"expectedHit": 22.268533958809158,
+				"attackSpeed": 4,
+				"dps": 9.278555816170483
+			}
+		},
+		{
+			"id": "m03-dhl-salve-ei-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 12018,
+				"weapon": 22978,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Lunge",
+				"type": "stab",
+				"stance": "Controlled"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 43416,
+				"npcDefRoll": 20070,
+				"accuracy": 0.7688463044429601,
+				"maxHit": 68,
+				"expectedHit": 26.151917051125032,
+				"attackSpeed": 4,
+				"dps": 10.896632104635431
+			}
+		},
+		{
+			"id": "m04-dhl-slayer-helm-task-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 11865,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 22978,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Swipe",
+				"type": "slash",
+				"stance": "Controlled"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": true,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 40950,
+				"npcDefRoll": 38356,
+				"accuracy": 0.5316597885277528,
+				"maxHit": 67,
+				"expectedHit": 17.818421441981602,
+				"attackSpeed": 4,
+				"dps": 7.424342267492334
+			}
+		},
+		{
+			"id": "m05-fang-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 26219,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Lunge",
+				"type": "stab",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 35164,
+				"npcDefRoll": 39886,
+				"accuracy": 0.587731173780775,
+				"maxHit": 51,
+				"expectedHit": 17.338069626532864,
+				"attackSpeed": 5,
+				"dps": 5.779356542177622
+			}
+		},
+		{
+			"id": "m06-fang-accurate-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 26219,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Stab",
+				"type": "stab",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 35872,
+				"npcDefRoll": 20070,
+				"accuracy": 0.8956448640282891,
+				"maxHit": 50,
+				"expectedHit": 25.973701056820385,
+				"attackSpeed": 5,
+				"dps": 8.657900352273462
+			}
+		},
+		{
+			"id": "m07-scythe-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 22325,
+				"body": 26384,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Chop",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 33674,
+				"npcDefRoll": 39886,
+				"accuracy": 0.42211748188632886,
+				"maxHit": 87,
+				"expectedHit": 18.4190931387202,
+				"attackSpeed": 5,
+				"dps": 6.139697712906734
+			}
+		},
+		{
+			"id": "m08-scythe-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 22325,
+				"body": 26384,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Reap",
+				"type": "slash",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 34352,
+				"npcDefRoll": 17876,
+				"accuracy": 0.7397898291270049,
+				"maxHit": 85,
+				"expectedHit": 31.542362037578172,
+				"attackSpeed": 5,
+				"dps": 10.514120679192725
+			}
+		},
+		{
+			"id": "m09-arclight-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 19675,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 42554,
+				"npcDefRoll": 17876,
+				"accuracy": 0.7899424274468335,
+				"maxHit": 61,
+				"expectedHit": 24.105985044022727,
+				"attackSpeed": 4,
+				"dps": 10.04416043500947
+			}
+		},
+		{
+			"id": "m10-emberlight-slayer-helm-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 11865,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 29589,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": true,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 59102,
+				"npcDefRoll": 17876,
+				"accuracy": 0.8487555623234015,
+				"maxHit": 68,
+				"expectedHit": 28.869989924246727,
+				"attackSpeed": 4,
+				"dps": 12.029162468436137
+			}
+		},
+		{
+			"id": "m11-inquisitor-mace-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 24419,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 24417,
+				"body": 24420,
+				"shield": 22322,
+				"legs": 24421,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Pummel",
+				"type": "crush",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 41083,
+				"npcDefRoll": 9701,
+				"accuracy": 0.8819126667315743,
+				"maxHit": 57,
+				"expectedHit": 25.149716392655584,
+				"attackSpeed": 4,
+				"dps": 10.479048496939827
+			}
+		},
+		{
+			"id": "m12-bludgeon-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 13263,
+				"body": 26384,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Pound",
+				"type": "crush",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 30247,
+				"npcDefRoll": 9701,
+				"accuracy": 0.839609230362338,
+				"maxHit": 53,
+				"expectedHit": 22.26519292368274,
+				"attackSpeed": 4,
+				"dps": 9.277163718201143
+			}
+		},
+		{
+			"id": "m13-rapier-muspah-melee",
+			"monsterId": 12078,
+			"monsterName": "Phantom Muspah (Melee)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 22324,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Lunge",
+				"type": "stab",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 34419,
+				"npcDefRoll": 52041,
+				"accuracy": 0.33068483148226435,
+				"maxHit": 57,
+				"expectedHit": 9.430219159856296,
+				"attackSpeed": 4,
+				"dps": 3.929257983273457
+			}
+		},
+		{
+			"id": "m14-void-melee-whip-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 11665,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 4151,
+				"body": 8839,
+				"shield": 22322,
+				"legs": 8840,
+				"hands": 8842,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Lash",
+				"type": "slash",
+				"stance": "Controlled"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 32340,
+				"npcDefRoll": 39886,
+				"accuracy": 0.40539524155739964,
+				"maxHit": 50,
+				"expectedHit": 10.14282996524004,
+				"attackSpeed": 4,
+				"dps": 4.2261791521833505
+			}
+		},
+		{
+			"id": "m15-bgs-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 11804,
+				"body": 26384,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 34717,
+				"npcDefRoll": 39886,
+				"accuracy": 0.4351919171659939,
+				"maxHit": 64,
+				"expectedHit": 13.932836609575896,
+				"attackSpeed": 6,
+				"dps": 3.87023239154886
+			}
+		},
+		{
+			"id": "m16-dscim-midlevel-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"neck": 6585,
+				"weapon": 4587,
+				"shield": 8850
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 70,
+				"str": 70,
+				"def": 70,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 12480,
+				"npcDefRoll": 39886,
+				"accuracy": 0.15644194850452528,
+				"maxHit": 18,
+				"expectedHit": 1.4162113233041234,
+				"attackSpeed": 4,
+				"dps": 0.590088051376718
+			}
+		},
+		{
+			"id": "m17-zombie-axe-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 28810,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Hack",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 35015,
+				"npcDefRoll": 38356,
+				"accuracy": 0.4564355919388899,
+				"maxHit": 60,
+				"expectedHit": 13.700550308854218,
+				"attackSpeed": 5,
+				"dps": 4.566850102951406
+			}
+		},
+		{
+			"id": "m18-noxious-halberd-zulrah",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 29796,
+				"body": 26384,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Swipe",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 34717,
+				"npcDefRoll": 19776,
+				"accuracy": 0.7151621637191082,
+				"maxHit": 50,
+				"expectedHit": 21.91235835454062,
+				"attackSpeed": 5,
+				"dps": 7.3041194515135395
+			}
+		},
+		{
+			"id": "m19-whip-zulrah-immune",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 4151,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Flick",
+				"type": "slash",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 32224,
+				"npcDefRoll": 19776,
+				"accuracy": 0.6931264546159814,
+				"maxHit": 0,
+				"expectedHit": 0,
+				"attackSpeed": 4,
+				"dps": 0
+			}
+		},
+		{
+			"id": "m20-colossal-blade-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 27021,
+				"body": 26384,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 29651,
+				"npcDefRoll": 39886,
+				"accuracy": 0.37168751723619226,
+				"maxHit": 64,
+				"expectedHit": 11.899718821054096,
+				"attackSpeed": 6,
+				"dps": 3.3054774502928046
+			}
+		},
+		{
+			"id": "m21-sulphur-blades-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 29084,
+				"body": 26384,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 25777,
+				"npcDefRoll": 17876,
+				"accuracy": 0.6532314376600201,
+				"maxHit": 48,
+				"expectedHit": 15.729813018853285,
+				"attackSpeed": 4,
+				"dps": 6.554088757855536
+			}
+		},
+		{
+			"id": "m22-burning-claws-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 29577,
+				"body": 26384,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 24249,
+				"npcDefRoll": 17876,
+				"accuracy": 0.6313814432989691,
+				"maxHit": 42,
+				"expectedHit": 13.273693598657397,
+				"attackSpeed": 4,
+				"dps": 5.530705666107249
+			}
+		},
+		{
+			"id": "m23-dhl-crush-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 22978,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Pound",
+				"type": "crush",
+				"stance": "Controlled"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 29100,
+				"npcDefRoll": 39886,
+				"accuracy": 0.3647805049264171,
+				"maxHit": 50,
+				"expectedHit": 9.126665182080554,
+				"attackSpeed": 4,
+				"dps": 3.802777159200231
+			}
+		},
+		{
+			"id": "m24-dscim-prayers-potions-lowlevel",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"neck": 1706,
+				"weapon": 4587
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 60,
+				"str": 65,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 14,
+				"str": 14,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"ULTIMATE_STRENGTH",
+				"INCREDIBLE_REFLEXES"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 13113,
+				"npcDefRoll": 39886,
+				"accuracy": 0.1643768646426154,
+				"maxHit": 21,
+				"expectedHit": 1.7334287544130351,
+				"attackSpeed": 4,
+				"dps": 0.7222619810054314
+			}
+		},
+		{
+			"id": "m25-salve-e-whip-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 10588,
+				"weapon": 4151,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Lash",
+				"type": "slash",
+				"stance": "Controlled"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 35460,
+				"npcDefRoll": 38356,
+				"accuracy": 0.4622363584221915,
+				"maxHit": 61,
+				"expectedHit": 14.105664357012685,
+				"attackSpeed": 4,
+				"dps": 5.877360148755286
+			}
+		},
+		{
+			"id": "m26-tentacle-chivalry-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 12006,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Lash",
+				"type": "slash",
+				"stance": "Controlled"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"CHIVALRY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 31680,
+				"npcDefRoll": 17876,
+				"accuracy": 0.7178435024146965,
+				"maxHit": 52,
+				"expectedHit": 18.677475279808803,
+				"attackSpeed": 4,
+				"dps": 7.782281366587002
+			}
+		},
+		{
+			"id": "m27-saeldor-muspah-ranged",
+			"monsterId": 12077,
+			"monsterName": "Phantom Muspah (Ranged)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 26382,
+				"cape": 21295,
+				"neck": 19553,
+				"weapon": 23995,
+				"body": 26384,
+				"shield": 22322,
+				"legs": 26386,
+				"hands": 22981,
+				"feet": 13239,
+				"ring": 28307
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Slash",
+				"type": "slash",
+				"stance": "Aggressive"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 19,
+				"str": 19,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"PIETY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 34270,
+				"npcDefRoll": 41382,
+				"accuracy": 0.41405891308025033,
+				"maxHit": 57,
+				"expectedHit": 11.807817969564379,
+				"attackSpeed": 4,
+				"dps": 4.919924153985158
+			}
+		},
+		{
+			"id": "r01-tbow-zulrah-blue",
+			"monsterId": 2044,
+			"monsterName": "Zulrah (Tanzanite)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 59441,
+				"npcDefRoll": 19776,
+				"accuracy": 0.8336361495239056,
+				"maxHit": 50,
+				"expectedHit": 27.942060450810434,
+				"attackSpeed": 5,
+				"dps": 9.314020150270144
+			}
+		},
+		{
+			"id": "r02-tbow-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 59441,
+				"npcDefRoll": 35226,
+				"accuracy": 0.703677534403284,
+				"maxHit": 50,
+				"expectedHit": 23.586069552529576,
+				"attackSpeed": 5,
+				"dps": 7.862023184176525
+			}
+		},
+		{
+			"id": "r03-tbow-zulrah-red",
+			"monsterId": 2043,
+			"monsterName": "Zulrah (Magma)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 59441,
+				"npcDefRoll": 112476,
+				"accuracy": 0.2642362438542991,
+				"maxHit": 50,
+				"expectedHit": 8.856747758945621,
+				"attackSpeed": 5,
+				"dps": 2.952249252981874
+			}
+		},
+		{
+			"id": "r04-tbow-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 48402,
+				"npcDefRoll": 20070,
+				"accuracy": 0.7926574799082702,
+				"maxHit": 62,
+				"expectedHit": 24.584963741916823,
+				"attackSpeed": 5,
+				"dps": 8.194987913972275
+			}
+		},
+		{
+			"id": "r05-tbow-slayer-helm-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 11865,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": true,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 63931,
+				"npcDefRoll": 17876,
+				"accuracy": 0.8601795657886504,
+				"maxHit": 84,
+				"expectedHit": 36.13766152272083,
+				"attackSpeed": 5,
+				"dps": 12.045887174240278
+			}
+		},
+		{
+			"id": "r06-tbow-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 36089,
+				"npcDefRoll": 39886,
+				"accuracy": 0.45239050317145935,
+				"maxHit": 44,
+				"expectedHit": 9.962644192064806,
+				"attackSpeed": 5,
+				"dps": 3.320881397354935
+			}
+		},
+		{
+			"id": "r07-tbow-muspah-ranged",
+			"monsterId": 12077,
+			"monsterName": "Phantom Muspah (Ranged)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "ranged",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 60697,
+				"npcDefRoll": 25080,
+				"accuracy": 0.7933869320241194,
+				"maxHit": 81,
+				"expectedHit": 32.14184619736738,
+				"attackSpeed": 6,
+				"dps": 8.928290610379827
+			}
+		},
+		{
+			"id": "r08-dhcb-diamond-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21946,
+				"weapon": 21012,
+				"body": 27238,
+				"shield": 21000,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 63133,
+				"npcDefRoll": 20070,
+				"accuracy": 0.8410365254854754,
+				"maxHit": 70,
+				"expectedHit": 26.600069670005283,
+				"attackSpeed": 5,
+				"dps": 8.86668989000176
+			}
+		},
+		{
+			"id": "r09-dhcb-ruby-kandarin-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21944,
+				"weapon": 21012,
+				"body": 27238,
+				"shield": 21000,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": true,
+			"expected": {
+				"maxAttackRoll": 63133,
+				"npcDefRoll": 20070,
+				"accuracy": 0.8410365254854754,
+				"maxHit": 100,
+				"expectedHit": 30.57127730980802,
+				"attackSpeed": 5,
+				"dps": 10.190425769936008
+			}
+		},
+		{
+			"id": "r10-dhcb-ruby-vorkath-300hp",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 300,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21944,
+				"weapon": 21012,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 59810,
+				"npcDefRoll": 20070,
+				"accuracy": 0.8322047783852469,
+				"maxHit": 60,
+				"expectedHit": 26.29916111457305,
+				"attackSpeed": 5,
+				"dps": 8.766387038191017
+			}
+		},
+		{
+			"id": "r11-dhcb-salve-ei-diamond-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 12018,
+				"ammo": 21946,
+				"weapon": 21012,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 68448,
+				"npcDefRoll": 20070,
+				"accuracy": 0.8533798886762407,
+				"maxHit": 78,
+				"expectedHit": 30.025821458304016,
+				"attackSpeed": 5,
+				"dps": 10.008607152768006
+			}
+		},
+		{
+			"id": "r12-dhcb-slayer-helm-task-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 11865,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21905,
+				"weapon": 21012,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": true,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 66870,
+				"npcDefRoll": 20070,
+				"accuracy": 0.849919995214667,
+				"maxHit": 65,
+				"expectedHit": 27.635277420161728,
+				"attackSpeed": 5,
+				"dps": 9.21175914005391
+			}
+		},
+		{
+			"id": "r13-acb-diamond-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 9243,
+				"weapon": 11785,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "ranged",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 47705,
+				"npcDefRoll": 39886,
+				"accuracy": 0.5819393786945039,
+				"maxHit": 50,
+				"expectedHit": 14.035999270038804,
+				"attackSpeed": 6,
+				"dps": 3.8988886861218903
+			}
+		},
+		{
+			"id": "r14-zcb-diamond-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21946,
+				"weapon": 26374,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 48138,
+				"npcDefRoll": 39886,
+				"accuracy": 0.5856997444899146,
+				"maxHit": 59,
+				"expectedHit": 15.350198132837562,
+				"attackSpeed": 5,
+				"dps": 5.116732710945854
+			}
+		},
+		{
+			"id": "r15-zcb-ruby-muspah-ranged",
+			"monsterId": 12077,
+			"monsterName": "Phantom Muspah (Ranged)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21944,
+				"weapon": 26374,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 48138,
+				"npcDefRoll": 25080,
+				"accuracy": 0.7394835788030495,
+				"maxHit": 110,
+				"expectedHit": 22.949673809177593,
+				"attackSpeed": 5,
+				"dps": 7.649891269725865
+			}
+		},
+		{
+			"id": "r16-bowfa-crystal-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 23971,
+				"cape": 28951,
+				"neck": 19547,
+				"weapon": 25865,
+				"body": 23975,
+				"legs": 23979,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 59625,
+				"npcDefRoll": 35226,
+				"accuracy": 0.704591956529031,
+				"maxHit": 47,
+				"expectedHit": 16.57258997752658,
+				"attackSpeed": 4,
+				"dps": 6.905245823969408
+			}
+		},
+		{
+			"id": "r17-bowfa-crystal-muspah-ranged",
+			"monsterId": 12077,
+			"monsterName": "Phantom Muspah (Ranged)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 23971,
+				"cape": 28951,
+				"neck": 19547,
+				"weapon": 25865,
+				"body": 23975,
+				"legs": 23979,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 59625,
+				"npcDefRoll": 25080,
+				"accuracy": 0.7896722906114781,
+				"maxHit": 47,
+				"expectedHit": 18.57375033542414,
+				"attackSpeed": 4,
+				"dps": 7.739062639760059
+			}
+		},
+		{
+			"id": "r18-bowfa-masori-muspah-shield",
+			"monsterId": 12079,
+			"monsterName": "Phantom Muspah (Shielded)",
+			"monsterCurrentHp": 75,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"weapon": 25865,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 49274,
+				"npcDefRoll": 25080,
+				"accuracy": 0.7454895991882293,
+				"maxHit": 43,
+				"expectedHit": 16.04496932798303,
+				"attackSpeed": 4,
+				"dps": 6.6854038866595955
+			}
+		},
+		{
+			"id": "r19-blowpipe-dragon-dart-zulrah-red",
+			"monsterId": 2043,
+			"monsterName": "Zulrah (Magma)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"weapon": 12926,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 11230,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 35358,
+				"npcDefRoll": 112476,
+				"accuracy": 0.15717880099931542,
+				"maxHit": 32,
+				"expectedHit": 2.519623809958723,
+				"attackSpeed": 2,
+				"dps": 2.099686508298936
+			}
+		},
+		{
+			"id": "r20-blowpipe-amethyst-dart-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"weapon": 12926,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 25849,
+			"style": {
+				"name": "Accurate",
+				"type": "ranged",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 36105,
+				"npcDefRoll": 39886,
+				"accuracy": 0.4525910697721062,
+				"maxHit": 31,
+				"expectedHit": 7.0293050523980245,
+				"attackSpeed": 3,
+				"dps": 3.905169473554458
+			}
+		},
+		{
+			"id": "r21-elite-void-tbow-zulrah-blue",
+			"monsterId": 2044,
+			"monsterName": "Zulrah (Tanzanite)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 11664,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 13072,
+				"legs": 13073,
+				"hands": 8842,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 43461,
+				"npcDefRoll": 19776,
+				"accuracy": 0.7724679029957204,
+				"maxHit": 50,
+				"expectedHit": 26.512519061439317,
+				"attackSpeed": 5,
+				"dps": 8.837506353813106
+			}
+		},
+		{
+			"id": "r22-void-blowpipe-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 11664,
+				"cape": 28951,
+				"neck": 19547,
+				"weapon": 12926,
+				"body": 8839,
+				"legs": 8840,
+				"hands": 8842,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 811,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 23244,
+				"npcDefRoll": 35226,
+				"accuracy": 0.3299173929088483,
+				"maxHit": 30,
+				"expectedHit": 4.9594033901781716,
+				"attackSpeed": 2,
+				"dps": 4.13283615848181
+			}
+		},
+		{
+			"id": "r23-rcb-broad-midlevel-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"cape": 10499,
+				"neck": 6585,
+				"ammo": 11875,
+				"weapon": 9185
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "ranged",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 75,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 11,
+				"magic": 0
+			},
+			"prayers": [
+				"EAGLE_EYE"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 18312,
+				"npcDefRoll": 20070,
+				"accuracy": 0.456180559015495,
+				"maxHit": 28,
+				"expectedHit": 6.402258190320913,
+				"attackSpeed": 6,
+				"dps": 1.7784050528669202
+			}
+		},
+		{
+			"id": "r24-msbi-amethyst-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21326,
+				"weapon": 12788,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 43168,
+				"npcDefRoll": 39886,
+				"accuracy": 0.5380018068521393,
+				"maxHit": 32,
+				"expectedHit": 8.624331994690355,
+				"attackSpeed": 3,
+				"dps": 4.791295552605753
+			}
+		},
+		{
+			"id": "r25-scorching-bow-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 29591,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 65163,
+				"npcDefRoll": 17876,
+				"accuracy": 0.8628230311214782,
+				"maxHit": 54,
+				"expectedHit": 23.311909531754846,
+				"attackSpeed": 4,
+				"dps": 9.713295638231186
+			}
+		},
+		{
+			"id": "r26-scorching-bow-slayer-helm-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 11865,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 29591,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": true,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 73027,
+				"npcDefRoll": 17876,
+				"accuracy": 0.8775948951087255,
+				"maxHit": 60,
+				"expectedHit": 26.342233654820923,
+				"attackSpeed": 4,
+				"dps": 10.975930689508719
+			}
+		},
+		{
+			"id": "r27-dark-bow-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 11235,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 46008,
+				"npcDefRoll": 39886,
+				"accuracy": 0.5665195939924798,
+				"maxHit": 66,
+				"expectedHit": 18.72847128375139,
+				"attackSpeed": 8,
+				"dps": 3.9017648507815395
+			}
+		},
+		{
+			"id": "r28-acb-onyx-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21950,
+				"weapon": 11785,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 46718,
+				"npcDefRoll": 39886,
+				"accuracy": 0.5731073010980543,
+				"maxHit": 56,
+				"expectedHit": 13.763442050934993,
+				"attackSpeed": 5,
+				"dps": 4.5878140169783315
+			}
+		},
+		{
+			"id": "r29-dhcb-opal-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21932,
+				"weapon": 21012,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 59810,
+				"npcDefRoll": 20070,
+				"accuracy": 0.8322047783852469,
+				"maxHit": 69,
+				"expectedHit": 24.697338480620733,
+				"attackSpeed": 5,
+				"dps": 8.23244616020691
+			}
+		},
+		{
+			"id": "r30-acb-pearl-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21936,
+				"weapon": 11785,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 46718,
+				"npcDefRoll": 20070,
+				"accuracy": 0.7851837582140029,
+				"maxHit": 54,
+				"expectedHit": 18.887194833294085,
+				"attackSpeed": 5,
+				"dps": 6.295731611098029
+			}
+		},
+		{
+			"id": "r31-acb-dragonstone-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21948,
+				"weapon": 11785,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": true,
+			"expected": {
+				"maxAttackRoll": 46718,
+				"npcDefRoll": 39886,
+				"accuracy": 0.5731073010980543,
+				"maxHit": 69,
+				"expectedHit": 14.311325089899183,
+				"attackSpeed": 5,
+				"dps": 4.770441696633061
+			}
+		},
+		{
+			"id": "r32-venator-bow-muspah-ranged",
+			"monsterId": 12077,
+			"monsterName": "Phantom Muspah (Ranged)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 27610,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 45298,
+				"npcDefRoll": 25080,
+				"accuracy": 0.7231506214265215,
+				"maxHit": 39,
+				"expectedHit": 14.11951588335283,
+				"attackSpeed": 4,
+				"dps": 5.88313161806368
+			}
+		},
+		{
+			"id": "r33-tbow-wrong-ammo",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 9243,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 0,
+				"npcDefRoll": 39886,
+				"accuracy": 0,
+				"maxHit": 0,
+				"expectedHit": 0,
+				"attackSpeed": 5,
+				"dps": 0
+			}
+		},
+		{
+			"id": "r34-tbow-deadeye-no-quiver-zulrah-blue",
+			"monsterId": 2044,
+			"monsterName": "Zulrah (Tanzanite)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 27235,
+				"cape": 22109,
+				"neck": 19547,
+				"ammo": 11212,
+				"weapon": 20997,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"DEADEYE"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 54684,
+				"npcDefRoll": 19776,
+				"accuracy": 0.819164304653927,
+				"maxHit": 50,
+				"expectedHit": 26.869639403295785,
+				"attackSpeed": 5,
+				"dps": 8.956546467765262
+			}
+		},
+		{
+			"id": "r35-dhcb-ruby-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 27235,
+				"cape": 28951,
+				"neck": 19547,
+				"ammo": 21944,
+				"weapon": 21012,
+				"body": 27238,
+				"legs": 27241,
+				"hands": 26235,
+				"feet": 13237,
+				"ring": 28310
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Rapid",
+				"type": "ranged",
+				"stance": "Rapid"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 13,
+				"magic": 0
+			},
+			"prayers": [
+				"RIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 46008,
+				"npcDefRoll": 35226,
+				"accuracy": 0.6171618596361581,
+				"maxHit": 50,
+				"expectedHit": 16.495191565780605,
+				"attackSpeed": 5,
+				"dps": 5.498397188593535
+			}
+		},
+		{
+			"id": "g01-shadow-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 27275,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 83956,
+				"npcDefRoll": 5871,
+				"accuracy": 0.9650237621639649,
+				"maxHit": 50,
+				"expectedHit": 29.325199697997498,
+				"attackSpeed": 5,
+				"dps": 9.775066565999166
+			}
+		},
+		{
+			"id": "g02-shadow-zulrah-red",
+			"monsterId": 2043,
+			"monsterName": "Zulrah (Magma)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 27275,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 83956,
+				"npcDefRoll": 19776,
+				"accuracy": 0.8822135140607692,
+				"maxHit": 50,
+				"expectedHit": 26.80875693474218,
+				"attackSpeed": 5,
+				"dps": 8.936252311580727
+			}
+		},
+		{
+			"id": "g03-shadow-muspah-melee",
+			"monsterId": 12078,
+			"monsterName": "Phantom Muspah (Melee)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 27275,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 83956,
+				"npcDefRoll": 15582,
+				"accuracy": 0.9071905856569434,
+				"maxHit": 66,
+				"expectedHit": 29.950829484674014,
+				"attackSpeed": 5,
+				"dps": 9.983609828224672
+			}
+		},
+		{
+			"id": "g04-shadow-slayer-helm-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 11865,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 27275,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": true,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 93944,
+				"npcDefRoll": 29541,
+				"accuracy": 0.8427643834158284,
+				"maxHit": 72,
+				"expectedHit": 30.35106252055087,
+				"attackSpeed": 5,
+				"dps": 10.117020840183624
+			}
+		},
+		{
+			"id": "g05-shadow-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 27275,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 83956,
+				"npcDefRoll": 32218,
+				"accuracy": 0.8081160594113653,
+				"maxHit": 66,
+				"expectedHit": 26.679891394297616,
+				"attackSpeed": 5,
+				"dps": 8.893297131432538
+			}
+		},
+		{
+			"id": "g06-swamp-trident-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 12899,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 32918,
+				"npcDefRoll": 5871,
+				"accuracy": 0.9107961967252954,
+				"maxHit": 44,
+				"expectedHit": 20.057756243439286,
+				"attackSpeed": 4,
+				"dps": 8.35739843476637
+			}
+		},
+		{
+			"id": "g07-sang-zulrah-red",
+			"monsterId": 2043,
+			"monsterName": "Zulrah (Magma)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 22323,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 32918,
+				"npcDefRoll": 19776,
+				"accuracy": 0.6995959780066223,
+				"maxHit": 50,
+				"expectedHit": 17.491356941786403,
+				"attackSpeed": 4,
+				"dps": 7.288065392411002
+			}
+		},
+		{
+			"id": "g08-sang-muspah-melee",
+			"monsterId": 12078,
+			"monsterName": "Phantom Muspah (Melee)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 22323,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 32918,
+				"npcDefRoll": 15582,
+				"accuracy": 0.7632977915489535,
+				"maxHit": 55,
+				"expectedHit": 19.17149619773788,
+				"attackSpeed": 4,
+				"dps": 7.988123415724117
+			}
+		},
+		{
+			"id": "g09-seas-trident-salve-ei-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12018,
+				"weapon": 11905,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 35515,
+				"npcDefRoll": 48336,
+				"accuracy": 0.36736868237581977,
+				"maxHit": 45,
+				"expectedHit": 8.273781629159764,
+				"attackSpeed": 4,
+				"dps": 3.447409012149902
+			}
+		},
+		{
+			"id": "g10-kodai-fire-surge-tome-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 21006,
+				"body": 21021,
+				"shield": 20714,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Fire Surge",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 51181,
+				"npcDefRoll": 5871,
+				"accuracy": 0.942626313938494,
+				"maxHit": 50,
+				"expectedHit": 23.584140717363113,
+				"attackSpeed": 5,
+				"dps": 7.861380239121038
+			}
+		},
+		{
+			"id": "g11-kodai-earth-surge-tome-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 21006,
+				"body": 21021,
+				"shield": 30064,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Earth Surge",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 47769,
+				"npcDefRoll": 32218,
+				"accuracy": 0.6627590537994557,
+				"maxHit": 47,
+				"expectedHit": 15.588645244574698,
+				"attackSpeed": 5,
+				"dps": 5.196215081524899
+			}
+		},
+		{
+			"id": "g12-kodai-water-surge-tome-cerberus",
+			"monsterId": 5862,
+			"monsterName": "Cerberus",
+			"monsterCurrentHp": 600,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 21006,
+				"body": 21021,
+				"shield": 25574,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Water Surge",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 54593,
+				"npcDefRoll": 29541,
+				"accuracy": 0.7294299739898158,
+				"maxHit": 47,
+				"expectedHit": 17.156800846552127,
+				"attackSpeed": 5,
+				"dps": 5.718933615517376
+			}
+		},
+		{
+			"id": "g13-harmonised-fire-surge-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 24423,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Fire Surge",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 46711,
+				"npcDefRoll": 5871,
+				"accuracy": 0.9371360678198322,
+				"maxHit": 46,
+				"expectedHit": 21.57406862512891,
+				"attackSpeed": 4,
+				"dps": 8.98919526047038
+			}
+		},
+		{
+			"id": "g14-smoke-staff-fire-wave-zulrah-red",
+			"monsterId": 2043,
+			"monsterName": "Zulrah (Magma)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 11998,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Fire Wave",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 80,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [
+				"MYSTIC_MIGHT"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 33127,
+				"npcDefRoll": 19776,
+				"accuracy": 0.7014911857039363,
+				"maxHit": 37,
+				"expectedHit": 12.996047229883452,
+				"attackSpeed": 5,
+				"dps": 4.332015743294484
+			}
+		},
+		{
+			"id": "g15-shadow-brimstone-muspah-melee",
+			"monsterId": 12078,
+			"monsterName": "Phantom Muspah (Melee)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 27275,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 22975
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 79879,
+				"npcDefRoll": 15582,
+				"accuracy": 0.9024536805207812,
+				"maxHit": 64,
+				"expectedHit": 28.97050631235315,
+				"attackSpeed": 5,
+				"dps": 9.65683543745105
+			}
+		},
+		{
+			"id": "g16-kodai-wind-surge-confliction-muspah-melee",
+			"monsterId": 12078,
+			"monsterName": "Phantom Muspah (Melee)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 21006,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 31106,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Wind Surge",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 56791,
+				"npcDefRoll": 15582,
+				"accuracy": 0.8766280521897739,
+				"maxHit": 49,
+				"expectedHit": 21.494919839693253,
+				"attackSpeed": 5,
+				"dps": 7.164973279897752
+			}
+		},
+		{
+			"id": "g17-elite-void-mage-swamp-trident-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"head": 11663,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 12899,
+				"body": 13072,
+				"legs": 13073,
+				"hands": 8842,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 30302,
+				"npcDefRoll": 5871,
+				"accuracy": 0.903095403095403,
+				"maxHit": 41,
+				"expectedHit": 18.534958034958034,
+				"attackSpeed": 4,
+				"dps": 7.722899181232514
+			}
+		},
+		{
+			"id": "g18-seas-trident-midlevel-zulrah-green",
+			"monsterId": 2042,
+			"monsterName": "Zulrah (Serpentine)",
+			"monsterCurrentHp": 500,
+			"equipment": {
+				"neck": 12002,
+				"weapon": 11905
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 80,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 4
+			},
+			"prayers": [
+				"MYSTIC_MIGHT"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 9737,
+				"npcDefRoll": 5871,
+				"accuracy": 0.6984493735880057,
+				"maxHit": 24,
+				"expectedHit": 8.409330457999591,
+				"attackSpeed": 4,
+				"dps": 3.503887690833163
+			}
+		},
+		{
+			"id": "g19-eye-of-ayak-muspah-melee",
+			"monsterId": 12078,
+			"monsterName": "Phantom Muspah (Melee)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 31113,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 33673,
+				"npcDefRoll": 15582,
+				"accuracy": 0.7686048583476867,
+				"maxHit": 39,
+				"expectedHit": 15.007009859238583,
+				"attackSpeed": 3,
+				"dps": 8.33722769957699
+			}
+		},
+		{
+			"id": "g20-warped-sceptre-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 28585,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 30955,
+				"npcDefRoll": 32218,
+				"accuracy": 0.4803842453210838,
+				"maxHit": 33,
+				"expectedHit": 7.9404689961896775,
+				"attackSpeed": 4,
+				"dps": 3.3085287484123658
+			}
+		},
+		{
+			"id": "g21-kodai-ice-barrage-virtus-graardor",
+			"monsterId": 2215,
+			"monsterName": "General Graardor",
+			"monsterCurrentHp": 255,
+			"equipment": {
+				"head": 26241,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 21006,
+				"body": 26243,
+				"legs": 26245,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Ice Barrage",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 32929,
+				"npcDefRoll": 32218,
+				"accuracy": 0.510780443364713,
+				"maxHit": 44,
+				"expectedHit": 11.2485204305429,
+				"attackSpeed": 5,
+				"dps": 3.749506810180967
+			}
+		},
+		{
+			"id": "g22-kodai-fire-surge-no-weakness-muspah",
+			"monsterId": 12078,
+			"monsterName": "Phantom Muspah (Melee)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 21006,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Fire Surge",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 13
+			},
+			"prayers": [
+				"AUGURY"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 32929,
+				"npcDefRoll": 15582,
+				"accuracy": 0.7633768600060735,
+				"maxHit": 34,
+				"expectedHit": 12.999217387531992,
+				"attackSpeed": 5,
+				"dps": 4.333072462510664
+			}
+		},
+		{
+			"id": "g23-shadow-vigour-muspah-post-shield",
+			"monsterId": 12080,
+			"monsterName": "Phantom Muspah (Post-shield)",
+			"monsterCurrentHp": 850,
+			"equipment": {
+				"head": 21018,
+				"cape": 21791,
+				"neck": 12002,
+				"weapon": 27275,
+				"body": 21021,
+				"legs": 21024,
+				"hands": 19544,
+				"feet": 13235,
+				"ring": 28313
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Accurate",
+				"type": "magic",
+				"stance": "Accurate"
+			},
+			"spell": null,
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 99,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 10
+			},
+			"prayers": [
+				"MYSTIC_VIGOUR"
+			],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 77284,
+				"npcDefRoll": 94188,
+				"accuracy": 0.41026022146959834,
+				"maxHit": 64,
+				"expectedHit": 13.13463878274207,
+				"attackSpeed": 5,
+				"dps": 4.37821292758069
+			}
+		},
+		{
+			"id": "g24-fire-bolt-midlevel-vorkath",
+			"monsterId": 8059,
+			"monsterName": "Vorkath (Post-quest)",
+			"monsterCurrentHp": 750,
+			"equipment": {
+				"neck": 1727,
+				"weapon": 1387
+			},
+			"dartId": 0,
+			"style": {
+				"name": "Spell",
+				"type": "magic",
+				"stance": "Autocast"
+			},
+			"spell": "Fire Bolt",
+			"skills": {
+				"atk": 99,
+				"str": 99,
+				"def": 99,
+				"ranged": 99,
+				"magic": 50,
+				"prayer": 99,
+				"hp": 99
+			},
+			"boosts": {
+				"atk": 0,
+				"str": 0,
+				"ranged": 0,
+				"magic": 0
+			},
+			"prayers": [],
+			"onSlayerTask": false,
+			"kandarinDiary": false,
+			"expected": {
+				"maxAttackRoll": 6938,
+				"npcDefRoll": 48336,
+				"accuracy": 0.0717669694023212,
+				"maxHit": 16,
+				"expectedHit": 0.5783573416540002,
+				"attackSpeed": 5,
+				"dps": 0.1927857805513334
+			}
+		}
+	]
+}

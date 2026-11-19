@@ -1,0 +1,12 @@
+{
+	"schema": 1,
+	"generated": "2026-11-19",
+	"source": "https://github.com/weirdgloop/osrs-dps-calc (cdn/json), generated from the Old School RuneScape Wiki",
+	"sourceRef": "3da927f4280c73154fa59e4e90eb374af5123d32",
+	"licence": "Data derived from the OSRS Wiki, CC BY-NC-SA 3.0. See NOTICE.md.",
+	"counts": {
+		"items": 5100,
+		"monsters": 2927,
+		"spells": 61
+	}
+}

@@ -1,0 +1,59 @@
+{
+	"schema": 1,
+	"id": "general-graardor",
+	"name": "General Graardor",
+	"category": "GWD",
+	"wikiUrl": "https://oldschool.runescape.wiki/w/General_Graardor",
+	"dataSource": "Monster statistics: OSRS Wiki via bundled monsters.json. Strategy notes: OSRS Wiki General Graardor/Strategies.",
+	"dataVersion": "2026-11-19",
+	"validationStatus": "PARTIAL",
+	"validationNotes": "DPS against General Graardor is covered by reference validation. The three sergeants are not included in the DPS figures, and group damage sharing is not modelled: group mode only changes the inventory template.",
+	"groupSizes": ["SOLO", "GROUP"],
+	"slayerTaskRelevant": false,
+	"requirements": [
+		{"type": "SKILL", "skill": "strength", "level": 70, "text": "70 Strength to enter Bandos' Stronghold"},
+		{"type": "QUEST", "quest": "TROLL_STRONGHOLD", "minState": "IN_PROGRESS", "text": "Troll Stronghold started (access to Trollheim)"},
+		{"type": "NOTE", "text": "40 Bandos kill count (less with the relevant diary) and a hammer are needed to enter the room"}
+	],
+	"warnings": [
+		"Wear at least one Bandos item (and ideally other god items) to avoid aggression in the main dungeon; god protection is not scored by the optimiser.",
+		"Sergeant kills are not included in the DPS estimate."
+	],
+	"damageTaken": {"crush": 0.7, "ranged": 0.3},
+	"variants": [
+		{
+			"id": "standard",
+			"name": "Standard",
+			"phases": [{"id": "main", "name": "General Graardor", "monsterId": 2215}]
+		}
+	],
+	"strategies": [
+		{
+			"id": "melee",
+			"name": "Melee (tank)",
+			"description": "Melee in the room, absorbing Graardor's attacks.",
+			"phaseStyles": {"main": "MELEE"},
+			"phaseWeights": {"main": 1.0},
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Melee boost"},
+				{"category": "PRAYER", "slots": {"SHORT": 4, "NORMAL": 6, "LONG": 9}, "reason": "Prayer upkeep"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		},
+		{
+			"id": "ranged",
+			"name": "Ranged (kiting)",
+			"description": "Ranged while moving between marked tiles so Graardor rarely reaches melee range. Pair with one of the General Graardor tile packs.",
+			"phaseStyles": {"main": "RANGED"},
+			"phaseWeights": {"main": 1.0},
+			"damageTaken": {"ranged": 0.8, "crush": 0.2},
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Ranged boost"},
+				{"category": "PRAYER", "slots": {"SHORT": 3, "NORMAL": 5, "LONG": 8}, "reason": "Prayer upkeep"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		}
+	]
+}

@@ -1,0 +1,84 @@
+{
+	"schema": 1,
+	"id": "zulrah",
+	"name": "Zulrah",
+	"category": "STANDARD",
+	"wikiUrl": "https://oldschool.runescape.wiki/w/Zulrah",
+	"dataSource": "Monster statistics: OSRS Wiki via bundled monsters.json. Strategy notes: OSRS Wiki Zulrah/Strategies.",
+	"dataVersion": "2026-11-19",
+	"validationStatus": "PARTIAL",
+	"validationNotes": "Per-form DPS (including the 50 damage cap and melee immunity) is covered by reference validation. The share of the kill spent on each form depends on the rotation and on how quickly you kill; the plugin weights the three forms equally, which is an assumption, not a measurement.",
+	"groupSizes": ["SOLO"],
+	"slayerTaskRelevant": true,
+	"requirements": [
+		{"type": "QUEST", "quest": "REGICIDE", "minState": "IN_PROGRESS", "text": "Regicide started far enough to reach Port Tyras"}
+	],
+	"warnings": [
+		"Zulrah cannot be hit with melee (halberds excepted). Only ranged and magic strategies are offered.",
+		"Zulrah's attacks and the snakelings apply venom: bring anti-venom or wear a serpentine helm.",
+		"Hits above 50 are re-rolled to 45-50; this is included in the DPS figures."
+	],
+	"damageTaken": {"ranged": 0.5, "magic": 0.5},
+	"variants": [
+		{
+			"id": "standard",
+			"name": "Standard",
+			"phases": [
+				{"id": "serpentine", "name": "Serpentine (green)", "monsterId": 2042},
+				{"id": "magma", "name": "Magma (red)", "monsterId": 2043},
+				{"id": "tanzanite", "name": "Tanzanite (blue)", "monsterId": 2044}
+			]
+		}
+	],
+	"strategies": [
+		{
+			"id": "hybrid",
+			"name": "Magic + ranged switches",
+			"description": "Magic against the green and red forms, ranged against the blue form. Switch items are carried in the inventory.",
+			"phaseStyles": {"serpentine": "MAGIC", "magma": "MAGIC", "tanzanite": "RANGED"},
+			"phaseWeights": {"serpentine": 0.3334, "magma": 0.3333, "tanzanite": 0.3333},
+			"weightsAreHeuristic": true,
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "combatClass": "RANGED", "reason": "Ranged boost for the blue form"},
+				{"category": "BOOST", "slots": 1, "combatClass": "MAGIC", "reason": "Magic boost for the green and red forms"},
+				{"category": "ANTIVENOM", "slots": 1, "mandatory": true, "reason": "Venom"},
+				{"category": "PRAYER", "slots": {"SHORT": 1, "NORMAL": 2, "LONG": 3}, "reason": "Prayer upkeep"},
+				{"category": "BOSS_TELEPORT", "family": "zulandra_teleport", "slots": 1, "reason": "Return trip"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		},
+		{
+			"id": "ranged",
+			"name": "Ranged only",
+			"description": "One ranged setup for every form. Much weaker against the red form, which has very high ranged defence.",
+			"phaseStyles": {"serpentine": "RANGED", "magma": "RANGED", "tanzanite": "RANGED"},
+			"phaseWeights": {"serpentine": 0.3334, "magma": 0.3333, "tanzanite": 0.3333},
+			"weightsAreHeuristic": true,
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Ranged boost"},
+				{"category": "ANTIVENOM", "slots": 1, "mandatory": true, "reason": "Venom"},
+				{"category": "PRAYER", "slots": {"SHORT": 1, "NORMAL": 2, "LONG": 3}, "reason": "Prayer upkeep"},
+				{"category": "BOSS_TELEPORT", "family": "zulandra_teleport", "slots": 1, "reason": "Return trip"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		},
+		{
+			"id": "magic",
+			"name": "Magic only",
+			"description": "One magic setup for every form. Much weaker against the blue form, which has very high magic defence.",
+			"phaseStyles": {"serpentine": "MAGIC", "magma": "MAGIC", "tanzanite": "MAGIC"},
+			"phaseWeights": {"serpentine": 0.3334, "magma": 0.3333, "tanzanite": 0.3333},
+			"weightsAreHeuristic": true,
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Magic boost"},
+				{"category": "ANTIVENOM", "slots": 1, "mandatory": true, "reason": "Venom"},
+				{"category": "PRAYER", "slots": {"SHORT": 1, "NORMAL": 2, "LONG": 3}, "reason": "Prayer upkeep"},
+				{"category": "BOSS_TELEPORT", "family": "zulandra_teleport", "slots": 1, "reason": "Return trip"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		}
+	]
+}

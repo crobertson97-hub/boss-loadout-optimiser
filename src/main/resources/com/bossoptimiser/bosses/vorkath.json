@@ -1,0 +1,64 @@
+{
+	"schema": 1,
+	"id": "vorkath",
+	"name": "Vorkath",
+	"category": "STANDARD",
+	"wikiUrl": "https://oldschool.runescape.wiki/w/Vorkath",
+	"dataSource": "Monster statistics: OSRS Wiki via bundled monsters.json. Strategy notes: OSRS Wiki Vorkath/Strategies.",
+	"dataVersion": "2026-11-19",
+	"validationStatus": "VALIDATED",
+	"validationNotes": "Single-phase fight. Dragon and undead bonuses (dragon hunter weapons, salve amulet) are covered by the reference validation tests.",
+	"groupSizes": ["SOLO"],
+	"slayerTaskRelevant": true,
+	"requirements": [
+		{"type": "QUEST", "quest": "DRAGON_SLAYER_II", "minState": "FINISHED", "text": "Dragon Slayer II completed"}
+	],
+	"warnings": [
+		"Dragonfire protection is mandatory: a super antifire potion, or an anti-dragon shield / dragonfire shield / dragonfire ward plus an antifire potion.",
+		"Vorkath's venom dragonfire applies venom: bring anti-venom.",
+		"The zombified spawn is normally killed with Crumble Undead; the planner reserves runes for it."
+	],
+	"damageTaken": {"magic": 0.5, "ranged": 0.5},
+	"variants": [
+		{
+			"id": "post-quest",
+			"name": "Post-quest",
+			"phases": [{"id": "main", "name": "Vorkath", "monsterId": 8059}]
+		}
+	],
+	"strategies": [
+		{
+			"id": "ranged",
+			"name": "Ranged",
+			"description": "Crossbow or bow from a distance. Dragon hunter crossbow and salve amulet (ei) are evaluated automatically if owned.",
+			"phaseStyles": {"main": "RANGED"},
+			"phaseWeights": {"main": 1.0},
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Ranged boost for the whole kill"},
+				{"category": "ANTIFIRE", "slots": 1, "mandatory": true, "reason": "Dragonfire protection"},
+				{"category": "ANTIVENOM", "slots": 1, "mandatory": true, "reason": "Venom dragonfire"},
+				{"category": "RUNE_POUCH", "slots": 1, "spell": "Crumble Undead", "casts": 30, "mandatory": true, "reason": "Crumble Undead for the zombified spawn"},
+				{"category": "PRAYER", "slots": {"SHORT": 1, "NORMAL": 2, "LONG": 4}, "reason": "Prayer upkeep"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		},
+		{
+			"id": "melee",
+			"name": "Melee",
+			"description": "Dragon hunter lance or other stab weapon in melee range. Vorkath's melee attack is added to the damage you take.",
+			"phaseStyles": {"main": "MELEE"},
+			"phaseWeights": {"main": 1.0},
+			"damageTaken": {"magic": 0.4, "ranged": 0.3, "slash": 0.3},
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Melee boost for the whole kill"},
+				{"category": "ANTIFIRE", "slots": 1, "mandatory": true, "reason": "Dragonfire protection"},
+				{"category": "ANTIVENOM", "slots": 1, "mandatory": true, "reason": "Venom dragonfire"},
+				{"category": "RUNE_POUCH", "slots": 1, "spell": "Crumble Undead", "casts": 30, "mandatory": true, "reason": "Crumble Undead for the zombified spawn"},
+				{"category": "PRAYER", "slots": {"SHORT": 2, "NORMAL": 3, "LONG": 5}, "reason": "Prayer upkeep"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		}
+	]
+}

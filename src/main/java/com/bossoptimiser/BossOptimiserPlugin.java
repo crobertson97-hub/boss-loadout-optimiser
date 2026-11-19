@@ -1,0 +1,520 @@
+package com.bossoptimiser;
+
+import com.bossoptimiser.account.AccountSnapshot;
+import com.bossoptimiser.bank.OwnedItemsTracker;
+import com.bossoptimiser.client.BankHighlightOverlay;
+import com.bossoptimiser.client.MissingItemsOverlay;
+import com.bossoptimiser.combat.PlayerLevels;
+import com.bossoptimiser.optimiser.PriceSource;
+import com.bossoptimiser.ui.BossOptimiserPanel;
+import com.bossoptimiser.util.KeyValueStore;
+import com.google.gson.Gson;
+import com.google.inject.Provides;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.inject.Inject;
+import javax.swing.SwingUtilities;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.Item;
+import net.runelite.api.ItemComposition;
+import net.runelite.api.ItemContainer;
+import net.runelite.api.Player;
+import net.runelite.api.Quest;
+import net.runelite.api.QuestState;
+import net.runelite.api.Skill;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.StatChanged;
+import net.runelite.api.events.WidgetClosed;
+import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.InventoryID;
+import net.runelite.client.callback.ClientThread;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.RuneScapeProfileChanged;
+import net.runelite.client.game.ItemManager;
+import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.ColorScheme;
+import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.ui.overlay.OverlayManager;
+
+/**
+ * RuneLite entry point. This class only adapts the client to {@link BossOptimiserService}:
+ * it reads item containers, levels and quest states on the client thread and forwards them, and it
+ * registers the sidebar and the bank overlays. It sends no input to the game and adds no menu entries.
+ */
+@Slf4j
+@PluginDescriptor(
+	name = "Boss Loadout Optimiser",
+	description = "Best gear and inventory you own for a boss, with DPS maths, upgrade advice and static tile packs",
+	tags = {"boss", "gear", "dps", "loadout", "bank", "inventory", "tiles", "pvm", "bis"}
+)
+public class BossOptimiserPlugin extends Plugin
+{
+	private static final String GROUND_MARKER_GROUP = "groundMarker";
+
+	@Inject
+	private Client client;
+
+	@Inject
+	private ClientThread clientThread;
+
+	@Inject
+	private ConfigManager configManager;
+
+	@Inject
+	private ItemManager itemManager;
+
+	@Inject
+	private ClientToolbar clientToolbar;
+
+	@Inject
+	private OverlayManager overlayManager;
+
+	@Inject
+	private Gson gson;
+
+	@Inject
+	private BossOptimiserConfig config;
+
+	private ExecutorService worker;
+	private BossOptimiserService service;
+	private NavigationButton navigationButton;
+	private BankHighlightOverlay bankOverlay;
+	private MissingItemsOverlay missingOverlay;
+	private volatile boolean bankOpen;
+	/** Set when levels, name or quest states should be re-read on the next game tick. */
+	private boolean accountDirty;
+	private final Map<Skill, Integer> knownLevels = new java.util.EnumMap<>(Skill.class);
+
+	@Provides
+	BossOptimiserConfig provideConfig(ConfigManager manager)
+	{
+		return manager.getConfig(BossOptimiserConfig.class);
+	}
+
+	@Override
+	protected void startUp()
+	{
+		worker = Executors.newSingleThreadExecutor(r -> {
+			Thread t = new Thread(r, "boss-loadout-optimiser");
+			t.setDaemon(true);
+			return t;
+		});
+		service = new BossOptimiserService(gson, new ClientEnvironment(), worker);
+
+		final BossOptimiserPanel panel = new BossOptimiserPanel(service);
+		navigationButton = NavigationButton.builder()
+			.tooltip("Boss Loadout Optimiser")
+			.icon(createIcon())
+			.priority(7)
+			.panel(panel)
+			.build();
+		clientToolbar.addNavigation(navigationButton);
+
+		bankOverlay = new BankHighlightOverlay(service, config, itemManager);
+		missingOverlay = new MissingItemsOverlay(() -> service.state().getWithdrawList(), () -> bankOpen, config);
+		overlayManager.add(bankOverlay);
+		overlayManager.add(missingOverlay);
+
+		service.start();
+		// If the plugin is enabled while already logged in, pick up the current account straight away.
+		clientThread.invokeLater(() -> {
+			if (client.getGameState() == GameState.LOGGED_IN)
+			{
+				syncAccount();
+				readContainers();
+			}
+		});
+		log.debug("Boss Loadout Optimiser started");
+	}
+
+	@Override
+	protected void shutDown()
+	{
+		overlayManager.remove(bankOverlay);
+		overlayManager.remove(missingOverlay);
+		clientToolbar.removeNavigation(navigationButton);
+		service.shutdown();
+		worker.shutdownNow();
+		bankOverlay = null;
+		missingOverlay = null;
+		navigationButton = null;
+		service = null;
+		worker = null;
+		bankOpen = false;
+		log.debug("Boss Loadout Optimiser stopped");
+	}
+
+	// ------------------------------------------------------------------ client events
+
+	@Subscribe
+	public void onRuneScapeProfileChanged(RuneScapeProfileChanged event)
+	{
+		// Fired when the logged-in account changes, including to "none" on logout.
+		clientThread.invokeLater(this::syncAccount);
+	}
+
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged event)
+	{
+		if (event.getGameState() == GameState.LOGGED_IN)
+		{
+			accountDirty = true;
+		}
+		else if (event.getGameState() == GameState.LOGIN_SCREEN)
+		{
+			bankOpen = false;
+		}
+	}
+
+	@Subscribe
+	public void onStatChanged(StatChanged event)
+	{
+		// Fires on every experience drop; only a level change can alter what the account may equip.
+		final Integer previous = knownLevels.put(event.getSkill(), event.getLevel());
+		if (previous == null || previous != event.getLevel())
+		{
+			accountDirty = true;
+		}
+	}
+
+	@Subscribe
+	public void onGameTick(GameTick tick)
+	{
+		if (accountDirty)
+		{
+			accountDirty = false;
+			syncAccount();
+		}
+	}
+
+	@Subscribe
+	public void onWidgetLoaded(WidgetLoaded event)
+	{
+		if (event.getGroupId() == InterfaceID.BANKMAIN)
+		{
+			bankOpen = true;
+			// Opening the bank is the natural moment to refresh quest states before optimising.
+			accountDirty = true;
+		}
+	}
+
+	@Subscribe
+	public void onWidgetClosed(WidgetClosed event)
+	{
+		if (event.getGroupId() == InterfaceID.BANKMAIN)
+		{
+			bankOpen = false;
+		}
+	}
+
+	@Subscribe
+	public void onItemContainerChanged(ItemContainerChanged event)
+	{
+		final OwnedItemsTracker.Container container = containerFor(event.getContainerId());
+		if (container != null && service != null)
+		{
+			service.onContainer(container, read(event.getItemContainer()));
+		}
+	}
+
+	private static OwnedItemsTracker.Container containerFor(int containerId)
+	{
+		if (containerId == InventoryID.BANK)
+		{
+			return OwnedItemsTracker.Container.BANK;
+		}
+		if (containerId == InventoryID.INV)
+		{
+			return OwnedItemsTracker.Container.INVENTORY;
+		}
+		if (containerId == InventoryID.WORN)
+		{
+			return OwnedItemsTracker.Container.EQUIPMENT;
+		}
+		return null;
+	}
+
+	// ------------------------------------------------------------------ reading the client (client thread only)
+
+	/**
+	 * Converts a container to real item id -> quantity. Noted items count as the real item,
+	 * and bank placeholders (which hold nothing) are skipped.
+	 */
+	private Map<Integer, Integer> read(ItemContainer container)
+	{
+		final Map<Integer, Integer> items = new HashMap<>();
+		if (container == null)
+		{
+			return items;
+		}
+		for (Item item : container.getItems())
+		{
+			if (item == null || item.getId() <= 0 || item.getQuantity() <= 0)
+			{
+				continue;
+			}
+			final ItemComposition composition = itemManager.getItemComposition(item.getId());
+			if (composition.getPlaceholderTemplateId() != -1)
+			{
+				continue;
+			}
+			items.merge(itemManager.canonicalize(item.getId()), item.getQuantity(), Integer::sum);
+		}
+		return items;
+	}
+
+	private void readContainers()
+	{
+		// The bank container is only available while the bank has been opened this session.
+		final ItemContainer bank = client.getItemContainer(InventoryID.BANK);
+		if (bank != null)
+		{
+			service.onContainer(OwnedItemsTracker.Container.BANK, read(bank));
+		}
+		service.onContainer(OwnedItemsTracker.Container.INVENTORY, read(client.getItemContainer(InventoryID.INV)));
+		service.onContainer(OwnedItemsTracker.Container.EQUIPMENT, read(client.getItemContainer(InventoryID.WORN)));
+	}
+
+	private void syncAccount()
+	{
+		if (service == null)
+		{
+			return;
+		}
+		final boolean loggedIn = client.getGameState() == GameState.LOGGED_IN;
+		// RuneLite's per-account profile key: local, stable, and never sent anywhere by this plugin.
+		final String accountKey = loggedIn ? configManager.getRSProfileKey() : null;
+		service.onAccountChanged(accountKey);
+		if (!loggedIn || accountKey == null)
+		{
+			service.onAccountSnapshot(AccountSnapshot.loggedOut());
+			return;
+		}
+
+		final PlayerLevels levels = PlayerLevels.builder()
+			.attack(client.getRealSkillLevel(Skill.ATTACK))
+			.strength(client.getRealSkillLevel(Skill.STRENGTH))
+			.defence(client.getRealSkillLevel(Skill.DEFENCE))
+			.ranged(client.getRealSkillLevel(Skill.RANGED))
+			.magic(client.getRealSkillLevel(Skill.MAGIC))
+			.prayer(client.getRealSkillLevel(Skill.PRAYER))
+			.hitpoints(client.getRealSkillLevel(Skill.HITPOINTS))
+			.slayer(client.getRealSkillLevel(Skill.SLAYER))
+			.agility(client.getRealSkillLevel(Skill.AGILITY))
+			.mining(client.getRealSkillLevel(Skill.MINING))
+			.build();
+
+		final Map<String, String> quests = new HashMap<>();
+		for (String name : service.relevantQuests())
+		{
+			try
+			{
+				final QuestState state = Quest.valueOf(name).getState(client);
+				quests.put(name, state == QuestState.FINISHED ? AccountSnapshot.FINISHED
+					: state == QuestState.IN_PROGRESS ? AccountSnapshot.IN_PROGRESS : AccountSnapshot.NOT_STARTED);
+			}
+			catch (RuntimeException e)
+			{
+				// Unknown quest name or the state could not be read: leave it out so it stays "unknown".
+				log.debug("Quest state unavailable for {}", name, e);
+			}
+		}
+
+		final Player local = client.getLocalPlayer();
+		final String name = local == null ? null : local.getName();
+		if (name == null)
+		{
+			// The player is not fully loaded yet; try again next tick.
+			accountDirty = true;
+		}
+		service.onAccountSnapshot(AccountSnapshot.builder()
+			.accountKey(accountKey)
+			.displayName(name)
+			.levels(levels)
+			.questStates(quests)
+			.loggedIn(true)
+			.build());
+		readContainers();
+	}
+
+	// ------------------------------------------------------------------ environment
+
+	/** Sidebar icon, drawn in code so no image resource is needed: a shield with a tick. */
+	private static BufferedImage createIcon()
+	{
+		final BufferedImage image = new BufferedImage(24, 24, BufferedImage.TYPE_INT_ARGB);
+		final Graphics2D g = image.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		final int[] xs = {4, 12, 20, 20, 12, 4};
+		final int[] ys = {4, 2, 4, 13, 22, 13};
+		g.setColor(ColorScheme.DARKER_GRAY_COLOR);
+		g.fillPolygon(xs, ys, xs.length);
+		g.setStroke(new BasicStroke(2f));
+		g.setColor(ColorScheme.BRAND_ORANGE);
+		g.drawPolygon(xs, ys, xs.length);
+		g.setColor(new Color(0, 220, 90));
+		g.drawPolyline(new int[]{8, 11, 16}, new int[]{11, 15, 8}, 3);
+		g.dispose();
+		return image;
+	}
+
+	private final class ClientEnvironment implements BossOptimiserService.Environment
+	{
+		private final KeyValueStore shared = new KeyValueStore()
+		{
+			@Override
+			public String get(String key)
+			{
+				return configManager.getConfiguration(BossOptimiserConfig.GROUP, key);
+			}
+
+			@Override
+			public void put(String key, String value)
+			{
+				configManager.setConfiguration(BossOptimiserConfig.GROUP, key, value);
+			}
+
+			@Override
+			public void remove(String key)
+			{
+				configManager.unsetConfiguration(BossOptimiserConfig.GROUP, key);
+			}
+		};
+
+		/** Per-account storage. With no account logged in it reads nothing and writes nothing. */
+		private final KeyValueStore account = new KeyValueStore()
+		{
+			@Override
+			public String get(String key)
+			{
+				return configManager.getRSProfileKey() == null ? null
+					: configManager.getRSProfileConfiguration(BossOptimiserConfig.GROUP, key);
+			}
+
+			@Override
+			public void put(String key, String value)
+			{
+				if (configManager.getRSProfileKey() != null)
+				{
+					configManager.setRSProfileConfiguration(BossOptimiserConfig.GROUP, key, value);
+				}
+			}
+
+			@Override
+			public void remove(String key)
+			{
+				if (configManager.getRSProfileKey() != null)
+				{
+					configManager.unsetRSProfileConfiguration(BossOptimiserConfig.GROUP, key);
+				}
+			}
+		};
+
+		/** RuneLite's Ground Markers plugin stores its tiles in this config group. */
+		private final KeyValueStore groundMarkers = new KeyValueStore()
+		{
+			@Override
+			public String get(String key)
+			{
+				return configManager.getConfiguration(GROUND_MARKER_GROUP, key);
+			}
+
+			@Override
+			public void put(String key, String value)
+			{
+				configManager.setConfiguration(GROUND_MARKER_GROUP, key, value);
+			}
+
+			@Override
+			public void remove(String key)
+			{
+				configManager.unsetConfiguration(GROUND_MARKER_GROUP, key);
+			}
+		};
+
+		private final PriceSource prices = new PriceSource()
+		{
+			@Override
+			public long price(int itemId)
+			{
+				try
+				{
+					return itemManager.getItemPrice(itemId);
+				}
+				catch (RuntimeException e)
+				{
+					return 0;
+				}
+			}
+
+			@Override
+			public String describe()
+			{
+				return "RuneLite's built-in price cache (Grand Exchange / OSRS Wiki prices, refreshed by the client roughly every 30 minutes)";
+			}
+		};
+
+		@Override
+		public KeyValueStore sharedStore()
+		{
+			return shared;
+		}
+
+		@Override
+		public KeyValueStore accountStore()
+		{
+			return account;
+		}
+
+		@Override
+		public KeyValueStore groundMarkerStore()
+		{
+			return groundMarkers;
+		}
+
+		@Override
+		public PriceSource prices()
+		{
+			return prices;
+		}
+
+		@Override
+		public BufferedImage itemImage(int itemId, int quantity)
+		{
+			return itemManager.getImage(itemId, quantity, quantity > 1);
+		}
+
+		@Override
+		public boolean groundMarkerInstallEnabled()
+		{
+			return config.allowGroundMarkerInstall();
+		}
+
+		@Override
+		public void runOnUi(Runnable task)
+		{
+			SwingUtilities.invokeLater(task);
+		}
+
+		@Override
+		public long now()
+		{
+			return System.currentTimeMillis();
+		}
+	}
+}

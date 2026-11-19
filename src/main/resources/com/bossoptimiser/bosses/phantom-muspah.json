@@ -1,0 +1,64 @@
+{
+	"schema": 1,
+	"id": "phantom-muspah",
+	"name": "Phantom Muspah",
+	"category": "STANDARD",
+	"wikiUrl": "https://oldschool.runescape.wiki/w/Phantom_Muspah",
+	"dataSource": "Monster statistics: OSRS Wiki via bundled monsters.json. Strategy notes: OSRS Wiki Phantom Muspah/Strategies.",
+	"dataVersion": "2026-11-19",
+	"validationStatus": "PARTIAL",
+	"validationNotes": "Per-form DPS is covered by reference validation. How long the Muspah spends in each form varies from kill to kill; the phase weights are an assumption. The prayer-shield phase is modelled only as a short ranged phase against the published 'Shielded' statistics.",
+	"groupSizes": ["SOLO"],
+	"slayerTaskRelevant": false,
+	"requirements": [
+		{"type": "QUEST", "quest": "SECRETS_OF_THE_NORTH", "minState": "FINISHED", "text": "Secrets of the North completed"}
+	],
+	"warnings": [
+		"The Muspah changes form during the fight: its ranged form has very high magic defence and its melee form has very high ranged defence.",
+		"Phase weights are assumptions; compare the per-phase DPS figures rather than only the weighted total."
+	],
+	"damageTaken": {"ranged": 0.45, "magic": 0.3, "stab": 0.25},
+	"variants": [
+		{
+			"id": "post-quest",
+			"name": "Post-quest",
+			"phases": [
+				{"id": "ranged-form", "name": "Ranged form", "monsterId": 12077},
+				{"id": "melee-form", "name": "Melee form", "monsterId": 12078},
+				{"id": "shielded", "name": "Prayer shield", "monsterId": 12079},
+				{"id": "post-shield", "name": "Post-shield", "monsterId": 12080}
+			]
+		}
+	],
+	"strategies": [
+		{
+			"id": "hybrid",
+			"name": "Ranged + magic switches",
+			"description": "Ranged against the ranged form, shield and post-shield; magic against the melee form.",
+			"phaseStyles": {"ranged-form": "RANGED", "melee-form": "MAGIC", "shielded": "RANGED", "post-shield": "RANGED"},
+			"phaseWeights": {"ranged-form": 0.4, "melee-form": 0.35, "shielded": 0.05, "post-shield": 0.2},
+			"weightsAreHeuristic": true,
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "combatClass": "RANGED", "reason": "Ranged boost"},
+				{"category": "BOOST", "slots": 1, "combatClass": "MAGIC", "reason": "Magic boost for the melee form"},
+				{"category": "PRAYER", "slots": {"SHORT": 3, "NORMAL": 5, "LONG": 7}, "reason": "Prayer upkeep"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		},
+		{
+			"id": "ranged",
+			"name": "Ranged only",
+			"description": "One ranged setup for the whole fight. Noticeably weaker against the melee form.",
+			"phaseStyles": {"ranged-form": "RANGED", "melee-form": "RANGED", "shielded": "RANGED", "post-shield": "RANGED"},
+			"phaseWeights": {"ranged-form": 0.4, "melee-form": 0.35, "shielded": 0.05, "post-shield": 0.2},
+			"weightsAreHeuristic": true,
+			"inventory": [
+				{"category": "BOOST", "slots": 1, "reason": "Ranged boost"},
+				{"category": "PRAYER", "slots": {"SHORT": 3, "NORMAL": 5, "LONG": 7}, "reason": "Prayer upkeep"},
+				{"category": "TELEPORT", "slots": 1, "reason": "Bank teleport"},
+				{"category": "FOOD", "fill": true, "reason": "Remaining slots"}
+			]
+		}
+	]
+}

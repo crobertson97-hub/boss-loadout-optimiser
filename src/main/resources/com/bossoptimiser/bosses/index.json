@@ -1,0 +1,10 @@
+{
+	"schema": 1,
+	"bosses": [
+		"vorkath.json",
+		"zulrah.json",
+		"cerberus.json",
+		"general-graardor.json",
+		"phantom-muspah.json"
+	]
+}

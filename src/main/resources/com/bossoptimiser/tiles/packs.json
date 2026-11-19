@@ -1,0 +1,634 @@
+{
+	"meta": {
+		"schema": 1,
+		"generated": "2026-11-19",
+		"source": "https://github.com/TrevorMDev/tile-packs",
+		"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+		"licence": "BSD 2-Clause, Copyright (c) 2022 TrevorMDev. See NOTICE.md."
+	},
+	"packs": [
+		{
+			"schema": 1,
+			"id": "tilepacks-60",
+			"bossId": "general-graardor",
+			"strategyId": null,
+			"name": "General Graador Altar Door",
+			"description": "Static ground markers from the Tile Packs plugin pack \"General Graador Altar Door\". Method reference: https://www.youtube.com/watch?v=ura5rtRDK58",
+			"author": "TrevorMDev and Tile Packs contributors",
+			"source": "https://github.com/TrevorMDev/tile-packs",
+			"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+			"licence": "BSD 2-Clause",
+			"validationStatus": "VERIFIED_SOURCE",
+			"version": 1,
+			"builtIn": true,
+			"markers": [
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 57,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "Shoot->door"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 51,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "D"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 45,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "D"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 42,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "Shoot->altar"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 54,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "A"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 48,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "A"
+				}
+			]
+		},
+		{
+			"schema": 1,
+			"id": "tilepacks-8",
+			"bossId": "general-graardor",
+			"strategyId": "ranged",
+			"name": "General Graardor 5:0",
+			"description": "Static ground markers from the Tile Packs plugin pack \"General Graardor 5:0\". Method reference: https://www.youtube.com/watch?v=6pnQRZi5LMg",
+			"author": "TrevorMDev and Tile Packs contributors",
+			"source": "https://github.com/TrevorMDev/tile-packs",
+			"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+			"licence": "BSD 2-Clause",
+			"validationStatus": "VERIFIED_SOURCE",
+			"version": 1,
+			"builtIn": true,
+			"markers": [
+				{
+					"regionId": 11347,
+					"regionX": 52,
+					"regionY": 39,
+					"z": 2,
+					"color": "#FF00FF00"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 49,
+					"regionY": 51,
+					"z": 2,
+					"color": "#FFFF0000"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 56,
+					"regionY": 54,
+					"z": 2,
+					"color": "#FFFF0000"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 59,
+					"regionY": 48,
+					"z": 2,
+					"color": "#FFFF0000"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 44,
+					"z": 2,
+					"color": "#FFFF0000"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 51,
+					"regionY": 40,
+					"z": 2,
+					"color": "#FFFF0000"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 53,
+					"z": 2,
+					"color": "#FFFF7F00"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 55,
+					"regionY": 43,
+					"z": 2,
+					"color": "#FFFF7F00"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 55,
+					"regionY": 42,
+					"z": 2,
+					"color": "#FFFF7F00"
+				}
+			]
+		},
+		{
+			"schema": 1,
+			"id": "tilepacks-31",
+			"bossId": "general-graardor",
+			"strategyId": "ranged",
+			"name": "General Graardor 6:0 4 tick",
+			"description": "Static ground markers from the Tile Packs plugin pack \"General Graardor 6:0 4 tick\". Method reference: https://www.youtube.com/watch?v=rvkytWBKzKU",
+			"author": "TrevorMDev and Tile Packs contributors",
+			"source": "https://github.com/TrevorMDev/tile-packs",
+			"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+			"licence": "BSD 2-Clause",
+			"validationStatus": "VERIFIED_SOURCE",
+			"version": 1,
+			"builtIn": true,
+			"markers": [
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 57,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "Shoot->door"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 51,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "D"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 45,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "D"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 54,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "A"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 48,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "A"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 42,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "Shoot->altar"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 52,
+					"regionY": 55,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "Shoot->door"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 52,
+					"regionY": 49,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "D"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 52,
+					"regionY": 43,
+					"z": 2,
+					"color": "#FF14D74F",
+					"label": "D"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 52,
+					"regionY": 52,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "A"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 52,
+					"regionY": 46,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "A"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 52,
+					"regionY": 40,
+					"z": 2,
+					"color": "#FFD81414",
+					"label": "Shoot->altar"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 48,
+					"regionY": 46,
+					"z": 2,
+					"color": "#FFFFFF00",
+					"label": "fresh instance 1st attack"
+				}
+			]
+		},
+		{
+			"schema": 1,
+			"id": "tilepacks-9",
+			"bossId": "general-graardor",
+			"strategyId": "ranged",
+			"name": "General Graardor 6:0 5 tick",
+			"description": "Static ground markers from the Tile Packs plugin pack \"General Graardor 6:0 5 tick\". Method reference: https://www.youtube.com/watch?v=oIWnXBqebTU",
+			"author": "TrevorMDev and Tile Packs contributors",
+			"source": "https://github.com/TrevorMDev/tile-packs",
+			"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+			"licence": "BSD 2-Clause",
+			"validationStatus": "VERIFIED_SOURCE",
+			"version": 1,
+			"builtIn": true,
+			"markers": [
+				{
+					"regionId": 11347,
+					"regionX": 60,
+					"regionY": 39,
+					"z": 2,
+					"color": "#FFF8EA09"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 48,
+					"regionY": 39,
+					"z": 2,
+					"color": "#FFF8EA09"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 48,
+					"regionY": 57,
+					"z": 2,
+					"color": "#FFF8EA09"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 60,
+					"regionY": 54,
+					"z": 2,
+					"color": "#FFF8EA09"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 48,
+					"regionY": 49,
+					"z": 2,
+					"color": "#FFF8EA09"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 60,
+					"regionY": 46,
+					"z": 2,
+					"color": "#FFF8EA09"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 40,
+					"z": 2,
+					"color": "#FFF8EA09",
+					"label": "start"
+				}
+			]
+		},
+		{
+			"schema": 1,
+			"id": "tilepacks-32",
+			"bossId": "general-graardor",
+			"strategyId": "ranged",
+			"name": "General Graardor 7:0",
+			"description": "Static ground markers from the Tile Packs plugin pack \"General Graardor 7:0\". Method reference: https://www.youtube.com/watch?v=H_6OZhaNd64",
+			"author": "TrevorMDev and Tile Packs contributors",
+			"source": "https://github.com/TrevorMDev/tile-packs",
+			"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+			"licence": "BSD 2-Clause",
+			"validationStatus": "VERIFIED_SOURCE",
+			"version": 1,
+			"builtIn": true,
+			"markers": [
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 57,
+					"z": 2,
+					"color": "#FF474744",
+					"label": "start here"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 51,
+					"regionY": 53,
+					"z": 2,
+					"color": "#FF474744",
+					"label": "1st"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 51,
+					"regionY": 47,
+					"z": 2,
+					"color": "#FFECE8F0",
+					"label": "2nd"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 43,
+					"z": 2,
+					"color": "#FFECE8F0",
+					"label": "3rd"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 49,
+					"regionY": 40,
+					"z": 2,
+					"color": "#FF474744",
+					"label": "4th"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 48,
+					"z": 2,
+					"color": "#FFECE8F0",
+					"label": "5th"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 53,
+					"z": 2,
+					"color": "#FF474744",
+					"label": "6th"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 59,
+					"regionY": 51,
+					"z": 2,
+					"color": "#FF474744",
+					"label": "red x cannon"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 60,
+					"regionY": 51,
+					"z": 2,
+					"color": "#FF474744",
+					"label": "red x item"
+				}
+			]
+		},
+		{
+			"schema": 1,
+			"id": "tilepacks-10",
+			"bossId": "general-graardor",
+			"strategyId": "ranged",
+			"name": "General Graardor 9:0",
+			"description": "Static ground markers from the Tile Packs plugin pack \"General Graardor 9:0\". Method reference: https://www.youtube.com/watch?v=YBKT-_USIQg",
+			"author": "TrevorMDev and Tile Packs contributors",
+			"source": "https://github.com/TrevorMDev/tile-packs",
+			"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+			"licence": "BSD 2-Clause",
+			"validationStatus": "VERIFIED_SOURCE",
+			"version": 1,
+			"builtIn": true,
+			"markers": [
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 55,
+					"z": 2,
+					"color": "#00FF0000"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 56,
+					"regionY": 45,
+					"z": 2,
+					"color": "#00FF0000"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 59,
+					"regionY": 50,
+					"z": 2,
+					"color": "#FFFF9000"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 57,
+					"z": 2,
+					"color": "#FF19A800",
+					"label": "Start"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 51,
+					"regionY": 54,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "1"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 55,
+					"regionY": 48,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "2"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 44,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "3"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 51,
+					"regionY": 48,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "4"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 54,
+					"regionY": 42,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "5"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 49,
+					"regionY": 39,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "6"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 47,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "7"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 52,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "8"
+				},
+				{
+					"regionId": 11347,
+					"regionX": 57,
+					"regionY": 56,
+					"z": 2,
+					"color": "#FFFF0000",
+					"label": "9"
+				}
+			]
+		},
+		{
+			"schema": 1,
+			"id": "tilepacks-39",
+			"bossId": "phantom-muspah",
+			"strategyId": null,
+			"name": "Muspah safespot",
+			"description": "Static ground markers from the Tile Packs plugin pack \"Muspah safespot\".",
+			"author": "TrevorMDev and Tile Packs contributors",
+			"source": "https://github.com/TrevorMDev/tile-packs",
+			"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+			"licence": "BSD 2-Clause",
+			"validationStatus": "VERIFIED_SOURCE",
+			"version": 1,
+			"builtIn": true,
+			"markers": [
+				{
+					"regionId": 11330,
+					"regionX": 28,
+					"regionY": 29,
+					"z": 0,
+					"color": "#FFFF0000"
+				}
+			]
+		},
+		{
+			"schema": 1,
+			"id": "tilepacks-25",
+			"bossId": "zulrah",
+			"strategyId": null,
+			"name": "Zulrah",
+			"description": "Static ground markers from the Tile Packs plugin pack \"Zulrah\".",
+			"author": "TrevorMDev and Tile Packs contributors",
+			"source": "https://github.com/TrevorMDev/tile-packs",
+			"sourceRef": "3f3f87c7d7b96e20cec644294314d732fdb01b77",
+			"licence": "BSD 2-Clause",
+			"validationStatus": "VERIFIED_SOURCE",
+			"version": 1,
+			"builtIn": true,
+			"markers": [
+				{
+					"regionId": 9008,
+					"regionX": 24,
+					"regionY": 0,
+					"z": 0,
+					"color": "#FFFFFF00"
+				},
+				{
+					"regionId": 9008,
+					"regionX": 32,
+					"regionY": 0,
+					"z": 0,
+					"color": "#FFFFFF00"
+				},
+				{
+					"regionId": 9008,
+					"regionX": 32,
+					"regionY": 6,
+					"z": 0,
+					"color": "#FFFFFF00"
+				},
+				{
+					"regionId": 9008,
+					"regionX": 24,
+					"regionY": 6,
+					"z": 0,
+					"color": "#FFFFFF00"
+				},
+				{
+					"regionId": 9008,
+					"regionX": 34,
+					"regionY": 5,
+					"z": 0,
+					"color": "#FFFFFF00"
+				},
+				{
+					"regionId": 9008,
+					"regionX": 22,
+					"regionY": 4,
+					"z": 0,
+					"color": "#FFFFFF00"
+				}
+			]
+		}
+	]
+}
