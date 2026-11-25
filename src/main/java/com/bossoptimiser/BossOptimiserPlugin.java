@@ -567,7 +567,7 @@ public class BossOptimiserPlugin extends Plugin
 			}
 			if (!bankOpen)
 			{
-				return "Open your bank first, then press Show in bank.";
+				return "Open your bank first, then press Show setup in bank.";
 			}
 			bankViewItems = java.util.Collections.unmodifiableSet(new java.util.HashSet<>(canonicalItemIds));
 			clientThread.invoke(BossOptimiserPlugin.this::openBankView);

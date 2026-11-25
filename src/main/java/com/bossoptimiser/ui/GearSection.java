@@ -66,9 +66,12 @@ final class GearSection extends Section
 	private int explainRequest;
 	private int viewVersion;
 
+	private final BankTagCard bankCard;
+
 	GearSection(UiController controller, Consumer<String> navigate)
 	{
 		super("Gear", controller);
+		bankCard = new BankTagCard(controller);
 		this.navigate = navigate;
 	}
 
@@ -173,6 +176,7 @@ final class GearSection extends Section
 	@Override
 	protected void update(UiState state)
 	{
+		bankCard.update(state);
 		OptimiserResult result = state.getResult();
 		Selection selection = state.getSelection() == null ? Selection.builder().build() : state.getSelection();
 		if (result != shownResult)
@@ -323,6 +327,10 @@ final class GearSection extends Section
 			content.add(UiKit.wrap(sb.toString()));
 		}
 
+		if (!readOnly)
+		{
+			content.add(bankCard);
+		}
 		addExcluded(selection);
 		addOtherSetups(result, others, readOnly);
 		addUnusable(result);

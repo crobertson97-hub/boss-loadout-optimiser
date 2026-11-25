@@ -63,7 +63,7 @@ Do these on a network that allows the game, following `docs/local-setup.md` §5:
 3. Optimised gear matches <https://tools.runescape.wiki/osrs-dps/> for the same inputs (spot-check two setups).
 4. Items marked "unverified" are really equippable by your account.
 5. Bank overlay: outlines, colours, quantity text and the missing-items list look right; nothing moves or is withdrawn.
-   *Show in bank* filters the bank to the setup; *Copy as bank tag tab* → right-click *New tag tab* → *Import tag tab* creates the tab.
+   *Show setup in bank* (Gear or Inventory page) filters the bank to the gear and supplies; *Copy as bank tag tab* → right-click *New tag tab* → *Import tag tab* creates the tab.
 6. Tile packs: Copy JSON + Ground Markers import; "Add to Ground Markers…" then reload the area; "Undo install".
 7. Save a profile, restart RuneLite, load it; check a second account has its own list.
 8. Upgrade prices look sane and say when they were read.
