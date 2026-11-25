@@ -131,8 +131,10 @@ public class MechanicsTest
 			CombatAssumptions.builder().build(), null, graardor)).isExact());
 
 		Loadout whip = Loadout.of(TestData.item("Abyssal whip"));
-		DpsResult corp = run(whip, "Lash", data.monster("Corporeal Beast", null), CombatAssumptions.builder().build());
-		assertFalse("Corporeal Beast's damage reduction is not modelled", corp.isExact());
+		DpsResult demon = run(whip, "Lash", data.monster("Tormented Demon", null), CombatAssumptions.builder().build());
+		assertFalse("Tormented Demon's shield is not modelled", demon.isExact());
+		// The Corporeal Beast's damage halving is modelled (reference scenarios x-corp-*), so its figures are exact.
+		assertTrue(run(whip, "Lash", data.monster("Corporeal Beast", null), CombatAssumptions.builder().build()).isExact());
 		assertNull(Mechanics.monsterUnsupportedReason(vorkath));
 	}
 

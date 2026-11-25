@@ -104,9 +104,10 @@ public final class BossRegistry
 			}
 			for (BossDefinition.Phase p : v.getPhases())
 			{
-				if (data.monster(p.getMonsterId()) == null)
+				if (data.monster(p.getMonsterId(), p.getMonsterVersion()) == null)
 				{
-					errors.add("phase " + p.getId() + " references unknown monster id " + p.getMonsterId());
+					errors.add("phase " + p.getId() + " references unknown monster " + p.getMonsterId()
+						+ (p.getMonsterVersion() == null ? "" : " (" + p.getMonsterVersion() + ")"));
 				}
 			}
 			for (BossDefinition.Strategy s : def.getStrategies())

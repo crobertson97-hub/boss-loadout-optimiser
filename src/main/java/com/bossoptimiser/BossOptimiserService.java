@@ -3,6 +3,7 @@ package com.bossoptimiser;
 import com.bossoptimiser.account.AccountSnapshot;
 import com.bossoptimiser.account.EligibilityChecker;
 import com.bossoptimiser.account.RequirementData;
+import com.bossoptimiser.bank.BankTagTab;
 import com.bossoptimiser.bank.OwnedItems;
 import com.bossoptimiser.bank.OwnedItemsTracker;
 import com.bossoptimiser.bank.WithdrawList;
@@ -83,6 +84,16 @@ public final class BossOptimiserService implements UiController
 		BufferedImage itemImage(int itemId, int quantity);
 
 		boolean groundMarkerInstallEnabled();
+
+		/**
+		 * Opens a temporary Bank Tags view in the open bank showing the given items (compared after
+		 * folding variants onto their canonical id). Nothing is saved.
+		 * @return null when shown, otherwise a message for the user
+		 */
+		default String showInBank(String title, Set<Integer> canonicalItemIds)
+		{
+			return "Bank tags are not available here.";
+		}
 
 		void runOnUi(Runnable task);
 
@@ -770,6 +781,110 @@ public final class BossOptimiserService implements UiController
 	public void selectTilePack(String packId)
 	{
 		publish(state.toBuilder().selection(state.getSelection().toBuilder().tilePackId(packId).build()).build());
+	}
+
+	// ------------------------------------------------------------------ bank tags
+
+	@Override
+	public String showInBank()
+	{
+		final GameData loaded = data;
+		final UiState current = state;
+		if (loaded == null)
+		{
+			return NOT_READY;
+		}
+		if (current.getResult() == null || current.getResult().primary() == null)
+		{
+			return "Optimise a setup first.";
+		}
+		Set<Integer> ids = new HashSet<>();
+		for (WithdrawList.Entry e : current.getWithdrawList().entries())
+		{
+			ids.add(e.getItemId());
+		}
+		for (OptimisedSetup setup : current.getResult().getSetups().values())
+		{
+			for (ItemDef item : setup.getLoadout().asMap().values())
+			{
+				ids.add(loaded.canonicalId(item.getId()));
+			}
+		}
+		if (current.getPlan() != null)
+		{
+			for (InventoryPlan.Slot slot : current.getPlan().getSlots())
+			{
+				ids.addAll(withOtherDoses(loaded, slot.getItemId()));
+			}
+		}
+		ids.remove(0);
+		if (ids.isEmpty())
+		{
+			return "The setup has no items to show.";
+		}
+		return env.showInBank(bankTagTitle(current), ids);
+	}
+
+	@Override
+	public String bankTagTabExport()
+	{
+		final GameData loaded = data;
+		final UiState current = state;
+		if (loaded == null || current.getResult() == null || current.getResult().primary() == null)
+		{
+			return null;
+		}
+		Map<ItemSlot, Integer> worn = new EnumMap<>(ItemSlot.class);
+		for (Map.Entry<ItemSlot, ItemDef> e : current.getResult().primary().getLoadout().asMap().entrySet())
+		{
+			worn.put(e.getKey(), e.getValue().getId());
+		}
+		List<Integer> inventory = new ArrayList<>();
+		Set<Integer> extra = new HashSet<>();
+		if (current.getPlan() != null)
+		{
+			for (InventoryPlan.Slot slot : current.getPlan().getSlots())
+			{
+				inventory.add(slot.getItemId());
+				extra.addAll(withOtherDoses(loaded, slot.getItemId()));
+			}
+		}
+		ItemDef weapon = current.getResult().primary().getLoadout().weapon();
+		return BankTagTab.export(bankTagTitle(current), weapon == null ? 0 : weapon.getId(), worn, inventory, extra);
+	}
+
+	private String bankTagTitle(UiState current)
+	{
+		BossRegistry registry = bosses;
+		Selection sel = current.getSelection();
+		BossDefinition boss = registry == null || sel == null ? null : registry.get(sel.getBossId());
+		if (boss == null)
+		{
+			return BankTagTab.tagName("boss loadout");
+		}
+		BossDefinition.Strategy strategy = boss.strategy(sel.getStrategyId());
+		return BankTagTab.tagName(boss.getName(), strategy == null ? null : strategy.getName());
+	}
+
+	/** The item plus, for a dosed potion, its other doses, so a bank holding (3) doses still shows. */
+	private Set<Integer> withOtherDoses(GameData loaded, int itemId)
+	{
+		Set<Integer> out = new HashSet<>();
+		if (itemId <= 0)
+		{
+			return out;
+		}
+		out.add(loaded.canonicalId(itemId));
+		SupplyCatalogue catalogue = supplies;
+		SupplyCatalogue.Family family = catalogue == null ? null : catalogue.familyOf(itemId);
+		if (family != null && family.isDosed())
+		{
+			for (int id : family.getIds())
+			{
+				out.add(loaded.canonicalId(id));
+			}
+		}
+		return out;
 	}
 
 	@Override

@@ -29,6 +29,10 @@ import java.util.List;
 public final class DpsCalculator
 {
 	private static final int[] ZULRAH_IDS = {2042, 2043, 2044};
+	/** Immune to melee (wiki calculator IMMUNE_TO_MELEE_DAMAGE_NPC_IDS, boss entries): Kraken, the Leviathan. */
+	private static final int[] MELEE_IMMUNE_IDS = {494, 12214, 12215, 12219};
+	/** Dusk (Grotesque Guardians) only takes melee damage. */
+	private static final int[] DUSK_IDS = {7851, 7854, 7855, 7882, 7883, 7886, 7887, 7888, 7889};
 
 	private final GameData data;
 
@@ -39,6 +43,7 @@ public final class DpsCalculator
 
 	public DpsResult calculate(CombatInput in)
 	{
+		in = withScaledMonster(in);
 		final Loadout loadout = in.getLoadout();
 		final CombatStyle style = in.getStyle();
 		final MonsterDef monster = in.getMonster();
@@ -258,15 +263,15 @@ public final class DpsCalculator
 		{
 			if (l.wearingAny("Arclight", "Emberlight"))
 			{
-				roll += roll * 70 / 100;
+				roll += roll * demonbane(m, 70) / 100;
 			}
 			if (l.wearingAny("Silverlight", "Darklight"))
 			{
-				roll += roll * 60 / 100;
+				roll += roll * demonbane(m, 60) / 100;
 			}
 			if (l.wearingAny("Bone claws", "Burning claws"))
 			{
-				roll += roll * 5 / 100;
+				roll += roll * demonbane(m, 5) / 100;
 			}
 		}
 		if (m.isDragon())
@@ -331,11 +336,11 @@ public final class DpsCalculator
 
 		if (m.isDemon() && l.wearingAny("Arclight", "Emberlight"))
 		{
-			max += max * 70 / 100;
+			max += max * demonbane(m, 70) / 100;
 		}
 		if (m.isDemon() && l.wearingAny("Bone claws", "Burning claws"))
 		{
-			max += max * 5 / 100;
+			max += max * demonbane(m, 5) / 100;
 		}
 		if (m.isDragon() && l.wearing("Dragon hunter lance"))
 		{
@@ -347,7 +352,7 @@ public final class DpsCalculator
 		}
 		if (m.isDemon() && l.wearingAny("Silverlight", "Darklight", "Silverlight (dyed)"))
 		{
-			max += max * 60 / 100;
+			max += max * demonbane(m, 60) / 100;
 		}
 		if (l.wearing("Colossal blade"))
 		{
@@ -419,7 +424,7 @@ public final class DpsCalculator
 		}
 		if (l.wearing("Scorching bow") && m.isDemon())
 		{
-			roll += roll * 30 / 100;
+			roll += roll * demonbane(m, 30) / 100;
 		}
 		return roll;
 	}
@@ -490,7 +495,7 @@ public final class DpsCalculator
 		}
 		if (needDemonbane)
 		{
-			max += max * 30 / 100;
+			max += max * demonbane(m, 30) / 100;
 		}
 		return new int[]{0, max};
 	}
@@ -999,6 +1004,13 @@ public final class DpsCalculator
 			dists.set(i, dists.get(i).accurateZeroToOne());
 		}
 
+		// The Corporeal Beast halves damage except from stab spears, halberds and Osmumten's fang, and from magic.
+		// Applied before ruby bolts, whose effect damage is not halved (wiki calculator order).
+		if ("Corporeal Beast".equals(m.getName()) && !corpbane(l, type))
+		{
+			transformAll(dists, (d, accurate, p, out) -> out.add(d / 2, accurate, p), true);
+		}
+
 		if (crossbow && ("Ruby bolts (e)".equals(ammoName) || "Ruby dragon bolts (e)".equals(ammoName))
 			&& in.getLevels().getHitpoints() >= 10)
 		{
@@ -1039,7 +1051,12 @@ public final class DpsCalculator
 
 	private static boolean isZulrah(MonsterDef m)
 	{
-		for (int id : ZULRAH_IDS)
+		return idIn(m, ZULRAH_IDS);
+	}
+
+	private static boolean idIn(MonsterDef m, int[] ids)
+	{
+		for (int id : ids)
 		{
 			if (m.getId() == id)
 			{
@@ -1049,12 +1066,133 @@ public final class DpsCalculator
 		return false;
 	}
 
+	static boolean corpbane(Loadout l, AttackType type)
+	{
+		final ItemDef weapon = l.weapon();
+		if (weapon == null)
+		{
+			return false;
+		}
+		final boolean stab = type == AttackType.STAB;
+		final String name = weapon.getName();
+		if (l.wearingAny("Osmumten's fang", "Osmumten's fang (or)") || name.endsWith("halberd"))
+		{
+			return stab;
+		}
+		if (name.contains("spear") && !"Blue Moon spear".equals(name))
+		{
+			return stab;
+		}
+		return type == AttackType.MAGIC;
+	}
+
+	/** Yama (wiki calculator YAMA_IDS). */
+	private static final int[] YAMA_IDS = {14176};
+
+	/**
+	 * A weapon's demonbane percentage against this monster. Some demons resist or are weak to demonbane
+	 * (wiki calculator demonbaneVulnerability): the weapon's percentage is scaled by theirs.
+	 */
+	static int demonbane(MonsterDef m, int weaponPercent)
+	{
+		return weaponPercent * demonbaneVulnerability(m) / 100;
+	}
+
+	static int demonbaneVulnerability(MonsterDef m)
+	{
+		switch (m.getName())
+		{
+			case "Duke Sucellus":
+				return 70;
+			case "Ocellus":
+			case "Xarth":
+				return 80;
+			case "Dreadnoth the Jellied":
+				return 25;
+			default:
+				break;
+		}
+		if (idIn(m, YAMA_IDS))
+		{
+			return 120;
+		}
+		if (m.getId() == 14179)
+		{
+			// Yama's void flare
+			return 200;
+		}
+		if (m.getId() == 7584 || m.getId() == 7585)
+		{
+			// Ice demon
+			return 115;
+		}
+		return 100;
+	}
+
+	/**
+	 * Monster statistics that depend on the fight, as the wiki calculator applies them:
+	 * <ul>
+	 * <li>Vardorvis' defence falls linearly from full to zero hitpoints.</li>
+	 * <li>Yama's magic defence bonus is 60 while the player tanking uses magic (outside phase 3). A solo player
+	 * is always the tank, so 60 is used; with a magic-using partner tanking for you it would be -30.</li>
+	 * </ul>
+	 */
+	static CombatInput withScaledMonster(CombatInput in)
+	{
+		final MonsterDef m = in.getMonster();
+		if (m == null)
+		{
+			return in;
+		}
+		if ("Vardorvis".equals(m.getName()))
+		{
+			final int maxHp;
+			final int defStart;
+			final int defEnd;
+			switch (m.getVersion())
+			{
+				case "Quest":
+					maxHp = 500;
+					defStart = 180;
+					defEnd = 130;
+					break;
+				case "Awakened":
+					maxHp = 1400;
+					defStart = 268;
+					defEnd = 181;
+					break;
+				default:
+					maxHp = 700;
+					defStart = 215;
+					defEnd = 145;
+					break;
+			}
+			final int hp = in.getMonsterCurrentHp() > 0 ? in.getMonsterCurrentHp() : maxHp;
+			// Integer-truncated linear interpolation, as in the wiki calculator's lerp().
+			final int def = (int) ((double) (hp - maxHp) * (defEnd - defStart) / (0 - maxHp) + defStart);
+			return in.toBuilder().monster(m.toBuilder().defenceLevel(def).build()).build();
+		}
+		if (idIn(m, YAMA_IDS) && !"Phase 3".equals(m.getVersion()))
+		{
+			return in.toBuilder().monster(m.toBuilder().defMagic(60).build()).build();
+		}
+		return in;
+	}
+
 	/** True when the monster cannot be damaged by this kind of attack at all. */
 	public static boolean isImmune(MonsterDef m, AttackType type, ItemDef weapon)
 	{
 		String category = weapon == null ? "" : weapon.getCategory();
+		if (!type.isMelee() && idIn(m, DUSK_IDS))
+		{
+			return true;
+		}
 		if (type.isMelee())
 		{
+			if (idIn(m, MELEE_IMMUNE_IDS))
+			{
+				return true;
+			}
 			if (isZulrah(m))
 			{
 				return !"Polearm".equals(category);
@@ -1094,6 +1232,11 @@ public final class DpsCalculator
 					out.add(45 + i, accurate, p / 6);
 				}
 			}, true);
+		}
+		if (type == AttackType.RANGED && ("Kraken".equals(m.getName()) || "Cave kraken".equals(m.getName())))
+		{
+			// Ranged damage is divided by 7; a hit of 1 or more still deals at least 1.
+			transformAll(dists, (d, accurate, p, out) -> out.add(d >= 1 ? Math.max(1, d / 7) : d, accurate, p), true);
 		}
 		if (m.getFlatArmour() != 0 && type != AttackType.MAGIC)
 		{

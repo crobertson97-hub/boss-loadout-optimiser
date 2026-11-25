@@ -81,6 +81,6 @@ tile packs never leave the machine (other than RuneLite's own optional profile s
    commit=<full 40-character commit hash>
    ```
 4. Open a pull request. Describe the features, state that the plugin makes no network requests, and raise
-   the five clarification items above. Per the template's rules, PRs produced with AI assistance should end
+   the clarification items above. Per the template's rules, PRs produced with AI assistance should end
    their description with `Generated-by: Claude Code`.
 5. Respond to review; update the `commit=` line for every change.

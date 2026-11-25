@@ -46,7 +46,12 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.RuneScapeProfileChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginManager;
+import net.runelite.client.plugins.banktags.BankTagsPlugin;
+import net.runelite.client.plugins.banktags.BankTagsService;
+import net.runelite.client.plugins.banktags.TagManager;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.NavigationButton;
@@ -63,8 +68,12 @@ import net.runelite.client.ui.overlay.OverlayManager;
 	description = "Best gear and inventory you own for a boss, with DPS maths, upgrade advice and static tile packs",
 	tags = {"boss", "gear", "dps", "loadout", "bank", "inventory", "tiles", "pvm", "bis"}
 )
+// Bank Tags provides the public BankTagsService / TagManager used for the temporary "Show in bank" view.
+@PluginDependency(BankTagsPlugin.class)
 public class BossOptimiserPlugin extends Plugin
 {
+	/** Name of the temporary, unsaved bank tag registered for "Show in bank". */
+	static final String BANK_VIEW_TAG = "boss loadout";
 	private static final String GROUND_MARKER_GROUP = "groundMarker";
 
 	@Inject
@@ -91,8 +100,22 @@ public class BossOptimiserPlugin extends Plugin
 	@Inject
 	private BossOptimiserConfig config;
 
+	@Inject
+	private BankTagsService bankTagsService;
+
+	@Inject
+	private TagManager tagManager;
+
+	@Inject
+	private PluginManager pluginManager;
+
+	/** Canonical ids shown by the temporary bank view; replaced each time "Show in bank" is used. */
+	private volatile java.util.Set<Integer> bankViewItems = java.util.Collections.emptySet();
+	private boolean bankViewRegistered;
+
 	private ExecutorService worker;
 	private BossOptimiserService service;
+	private ClientEnvironment environment;
 	private NavigationButton navigationButton;
 	private BankHighlightOverlay bankOverlay;
 	private MissingItemsOverlay missingOverlay;
@@ -130,7 +153,8 @@ public class BossOptimiserPlugin extends Plugin
 			t.setDaemon(true);
 			return t;
 		});
-		service = new BossOptimiserService(gson, new ClientEnvironment(), worker);
+		environment = new ClientEnvironment();
+		service = new BossOptimiserService(gson, environment, worker);
 
 		final BossOptimiserPanel panel = new BossOptimiserPanel(service);
 		navigationButton = NavigationButton.builder()
@@ -159,6 +183,12 @@ public class BossOptimiserPlugin extends Plugin
 	}
 
 	/** For tests. */
+	BossOptimiserService.Environment environmentForTests()
+	{
+		return environment;
+	}
+
+	/** For tests. */
 	BossOptimiserService service()
 	{
 		return service;
@@ -167,6 +197,7 @@ public class BossOptimiserPlugin extends Plugin
 	@Override
 	protected void shutDown()
 	{
+		clientThread.invoke(this::removeBankView);
 		if (client.getGameState() == GameState.LOGGED_IN)
 		{
 			service.persistBank(configManager.getRSProfileKey());
@@ -472,8 +503,77 @@ public class BossOptimiserPlugin extends Plugin
 		return image;
 	}
 
+	/** True when RuneLite's Bank Tags plugin is switched on. */
+	private boolean bankTagsEnabled()
+	{
+		for (Plugin p : pluginManager.getPlugins())
+		{
+			if (p instanceof BankTagsPlugin)
+			{
+				return pluginManager.isPluginEnabled(p);
+			}
+		}
+		return false;
+	}
+
+	/** Client thread only. */
+	private void openBankView()
+	{
+		if (!bankOpen)
+		{
+			return;
+		}
+		if (!bankViewRegistered)
+		{
+			// The tag is only held in memory: Bank Tags shows it like a tag tab but nothing is saved.
+			tagManager.registerTag(BANK_VIEW_TAG, itemId -> bankViewItems.contains(canonicalBankId(itemId)));
+			bankViewRegistered = true;
+		}
+		bankTagsService.openBankTag(BANK_VIEW_TAG, BankTagsService.OPTION_NO_LAYOUT);
+	}
+
+	/** Client thread only. */
+	private int canonicalBankId(int itemId)
+	{
+		final BossOptimiserService s = service;
+		final com.bossoptimiser.data.GameData data = s == null ? null : s.gameData();
+		final int id = itemManager.canonicalize(itemId);
+		return data == null ? id : data.canonicalId(id);
+	}
+
+	/** Client thread only. */
+	private void removeBankView()
+	{
+		if (!bankViewRegistered)
+		{
+			return;
+		}
+		if (BANK_VIEW_TAG.equals(bankTagsService.getActiveTag()))
+		{
+			bankTagsService.closeBankTag();
+		}
+		tagManager.unregisterTag(BANK_VIEW_TAG);
+		bankViewRegistered = false;
+	}
+
 	private final class ClientEnvironment implements BossOptimiserService.Environment
 	{
+		@Override
+		public String showInBank(String title, java.util.Set<Integer> canonicalItemIds)
+		{
+			if (!bankTagsEnabled())
+			{
+				return "Turn on RuneLite's Bank Tags plugin (Configuration > Bank Tags) to use this.";
+			}
+			if (!bankOpen)
+			{
+				return "Open your bank first, then press Show in bank.";
+			}
+			bankViewItems = java.util.Collections.unmodifiableSet(new java.util.HashSet<>(canonicalItemIds));
+			clientThread.invoke(BossOptimiserPlugin.this::openBankView);
+			return null;
+		}
+
 		private final KeyValueStore shared = new KeyValueStore()
 		{
 			@Override

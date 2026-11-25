@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 import com.bossoptimiser.bank.OwnedItemsTracker.Container;
 import com.bossoptimiser.bank.WithdrawList;
 import com.bossoptimiser.data.CombatClass;
+import com.bossoptimiser.data.ItemDef;
 import com.bossoptimiser.data.ItemSlot;
 import com.bossoptimiser.inventory.InventoryPlan;
 import com.bossoptimiser.inventory.SupplyCatalogue;
@@ -100,13 +101,48 @@ public class ServiceIntegrationTest
 		UiState s = service.state();
 		assertTrue(s.isDataReady());
 		assertNull(s.getLoadError());
-		assertEquals(5, service.bosses().size());
+		assertEquals(Fixtures.bosses().supported().size(), service.bosses().size());
+		assertTrue(service.bosses().size() >= 51);
 		assertNotNull(service.gameData());
 		assertNotNull("A boss is pre-selected so the sidebar is never empty", s.getSelection().getBossId());
 		assertFalse(s.getAccount().isLoggedIn());
 		assertFalse(s.getOwned().hasBankData());
 		assertFalse(published.isEmpty());
 		assertTrue(service.relevantQuests().contains("DRAGON_SLAYER_II"));
+	}
+
+	@Test
+	public void bankTagViewAndTagTabExportCoverTheWholeSetup()
+	{
+		login("acct-1");
+		selectVorkathRanged();
+		assertEquals("Optimise a setup first.", service.showInBank());
+		assertNull(service.bankTagTabExport());
+
+		service.onContainer(Container.BANK, bank());
+		service.onContainer(Container.INVENTORY, new HashMap<>());
+		service.optimise();
+		UiState s = service.state();
+		OptimisedSetup best = s.getResult().primary();
+
+		assertNull(service.showInBank());
+		assertEquals("vorkath ranged", env.bankViewTitle);
+		for (ItemDef item : best.getLoadout().asMap().values())
+		{
+			assertTrue(item.getName(), env.bankViewItems.contains(service.gameData().canonicalId(item.getId())));
+		}
+		for (InventoryPlan.Slot slot : s.getPlan().getSlots())
+		{
+			assertTrue(slot.getName(), env.bankViewItems.contains(service.gameData().canonicalId(slot.getItemId())));
+		}
+
+		String text = service.bankTagTabExport();
+		assertTrue(text, text.startsWith("banktags,1,vorkath ranged," + best.getLoadout().weapon().getId() + ","));
+		assertTrue(text.contains(",layout,"));
+		// Every worn item and every planned inventory slot has a layout position.
+		String layout = text.substring(text.indexOf(",layout,") + ",layout,".length());
+		int pairs = layout.split(",").length / 2;
+		assertEquals(best.getLoadout().asMap().size() + s.getPlan().getSlots().size(), pairs);
 	}
 
 	@Test

@@ -29,6 +29,7 @@ const scenarios = raw.map((r) => {
 	return {
 		id: r.id,
 		monsterId: r.resolved.monster.id,
+		monsterVersion: r.resolved.monster.version || '',
 		monsterName: `${r.resolved.monster.name}${r.resolved.monster.version ? ` (${r.resolved.monster.version})` : ''}`,
 		monsterCurrentHp: r.resolved.monsterCurrentHp,
 		equipment: eq,

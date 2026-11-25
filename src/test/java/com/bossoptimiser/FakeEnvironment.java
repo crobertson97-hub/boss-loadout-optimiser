@@ -19,6 +19,17 @@ public class FakeEnvironment implements BossOptimiserService.Environment
 	public long now = Fixtures.NOW;
 	public PriceSource prices;
 	public boolean groundMarkerInstall = true;
+	/** What the last "Show in bank" asked the client to show. */
+	public String bankViewTitle;
+	public java.util.Set<Integer> bankViewItems;
+
+	@Override
+	public String showInBank(String title, java.util.Set<Integer> canonicalItemIds)
+	{
+		bankViewTitle = title;
+		bankViewItems = canonicalItemIds;
+		return null;
+	}
 
 	private final KeyValueStore account = new KeyValueStore()
 	{

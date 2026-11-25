@@ -90,6 +90,8 @@ public class BossDefinition
 		private String id;
 		private String name;
 		private int monsterId;
+		/** Optional: the monster version, needed when one id is shared by several versions. */
+		private String monsterVersion;
 	}
 
 	@Data

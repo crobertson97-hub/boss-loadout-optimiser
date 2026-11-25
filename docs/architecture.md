@@ -174,8 +174,19 @@ plugin version is refused with a message.
 
 ## Extending
 
-- **New boss:** add `bosses/<id>.json`, list it in `bosses/index.json`. `BossRegistry.validate` rejects
-  unknown monsters, missing phase styles and weights that do not sum to 1. Set `validationStatus` honestly;
-  `UNVALIDATED` bosses are never offered. Add reference scenarios for the boss before marking it validated.
+- **New boss:** add an entry to the curated table in `scripts/gen-bosses.mjs` and run it (`--check` reports
+  stale files). It resolves each phase to a monster id and, when an id is shared by several versions (quest,
+  post-quest, awakened), pins `monsterVersion`. It derives antifire from the monster's attack styles, the
+  Survivability weights from its listed attack styles, and the tier: **VALIDATED** only for a single phase with no
+  unmodelled rule, otherwise **PARTIAL** with the reasons in `validationNotes`. Requirements are written only when
+  certain; otherwise a NOTE points at the wiki. The five original bosses are hand-written JSON and are never
+  overwritten. Then run `scripts/reference/gen-scenarios.mjs` (it adds a scenario per phase and style for every
+  generated boss), the reference calculator and `trim-results.mjs`; `ReferenceValidationTest` fails if any phase
+  and style of an offered boss has no reference scenario. `BossRegistry.validate` rejects unknown monsters,
+  missing phase styles and weights that do not sum to 1; `UNVALIDATED` bosses are never offered.
+- **Bank tags:** "Show in bank" registers an in-memory tag with Bank Tags' public `TagManager.registerTag` and opens
+  it with `BankTagsService.openBankTag` (client thread; the plugin declares `@PluginDependency(BankTagsPlugin.class)`).
+  It is unregistered on shutdown. "Copy as bank tag tab" only produces text (`bank/BankTagTab`) in the format of
+  Bank Tags' *Import tag tab*; the plugin never writes Bank Tags' configuration.
 - **Game update:** `node scripts/update-data.mjs`, then run the tests; `ReferenceValidationTest` shows what moved.
 - **New mechanic:** implement it in `combat`, remove it from `Mechanics.UNSUPPORTED_*`, add scenarios.

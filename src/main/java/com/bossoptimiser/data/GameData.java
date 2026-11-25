@@ -35,6 +35,7 @@ public final class GameData
 	private final Map<ItemSlot, List<ItemDef>> itemsBySlot = new EnumMap<>(ItemSlot.class);
 	private final Map<Integer, Integer> aliases = new HashMap<>();
 	private final Map<Integer, MonsterDef> monstersById = new HashMap<>();
+	private final Map<Integer, List<MonsterDef>> monsterVersionsById = new HashMap<>();
 	private final Map<String, List<MonsterDef>> monstersByName = new HashMap<>();
 	private final Map<String, SpellDef> spellsByName = new HashMap<>();
 	private final List<SpellDef> spells = new ArrayList<>();
@@ -160,6 +161,7 @@ public final class GameData
 				.build();
 			// The source lists some monsters several times with the same id; the first entry wins.
 			monstersById.putIfAbsent(monster.getId(), monster);
+			monsterVersionsById.computeIfAbsent(monster.getId(), k -> new ArrayList<>()).add(monster);
 			monstersByName.computeIfAbsent(monster.getName(), k -> new ArrayList<>()).add(monster);
 		}
 	}
@@ -332,6 +334,26 @@ public final class GameData
 	public MonsterDef monster(int id)
 	{
 		return monstersById.get(id);
+	}
+
+	/**
+	 * A monster by id and version. Some ids are shared by several versions (for example a quest and a
+	 * post-quest boss); without a version the first listed entry is returned.
+	 */
+	public MonsterDef monster(int id, String versionName)
+	{
+		if (versionName == null || versionName.isEmpty())
+		{
+			return monster(id);
+		}
+		for (MonsterDef m : monsterVersionsById.getOrDefault(id, Collections.emptyList()))
+		{
+			if (versionName.equals(m.getVersion()))
+			{
+				return m;
+			}
+		}
+		return null;
 	}
 
 	public MonsterDef monster(String name, String versionName)

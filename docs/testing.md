@@ -7,7 +7,7 @@ Current results are recorded in [verification-report.md](verification-report.md)
 
 | Test class | Kind | Covers |
 |---|---|---|
-| `combat.ReferenceValidationTest` | reference validation | 86 loadouts recomputed and compared with the OSRS Wiki DPS calculator |
+| `combat.ReferenceValidationTest` | reference validation | 364 loadouts recomputed and compared with the OSRS Wiki DPS calculator; every phase and style of every offered boss must have one |
 | `combat.BasicRollsTest` | unit | Hand-checkable attack rolls, max hits, accuracy branches, DPS definition |
 | `combat.MechanicsTest` | unit | Potion and prayer assumptions, slayer task flag, immunity, ammunition validity, unsupported mechanics are flagged, equipment totals, hit distributions |
 | `data.BundledDataTest` | data integrity | Item/monster/spell catalogues, variants, charge states, two-handed flag, ammunition table, boss definitions (and rejection of broken ones), requirement rules name real items and quests, **every supply id re-checked against RuneLite's `ItemID`** |
@@ -50,8 +50,12 @@ fails on its patched dependency), add a Jest test that reads the scenarios, buil
 test helper: it leaves the current hitpoints at 150, which gives wrong ruby-bolt figures; default to full hitpoints.
 The calculator's own defaults also have *on slayer task* and *Kandarin diary* switched **on**, so every scenario here sets both explicitly.
 
-**Inputs.** 86 scenarios: 27 melee, 35 ranged, 24 magic, against Vorkath, all three Zulrah forms, Cerberus,
-General Graardor and four Phantom Muspah forms (plus an Abyssal demon baseline). Unless stated, levels are 99.
+**Inputs.** 364 scenarios. 89 hand-written ones (27 melee, 37 ranged, 25 magic) against Vorkath, all three Zulrah
+forms, Cerberus, General Graardor and four Phantom Muspah forms (plus an Abyssal demon baseline); 257 generated
+ones, one per phase and style of every generated boss with a top-end setup (Torva + fang/whip/bludgeon by the
+weakest melee defence, Masori + twisted bow, Ancestral + Tumeken's shadow) plus Arclight against demons, dragon
+hunter lance/crossbow against dragons, salve (ei) against undead and the slayer helmet on task; and 18 targeted
+special-rule checks (`x-*`: Kraken, Leviathan, Dusk, Dawn, Kree'arra and Corporeal Beast). Unless stated, levels are 99.
 
 | Area | Scenarios exercise |
 |---|---|
@@ -59,7 +63,9 @@ General Graardor and four Phantom Muspah forms (plus an Abyssal demon baseline).
 | Ranged | twisted bow vs every boss; dragon hunter crossbow with diamond / ruby (full and partial HP, Kandarin diary) / opal / plain bolts, with salve and with slayer helmet (additive rule); Armadyl and Zaryte crossbows; pearl, dragonstone and onyx bolts; bow of Faerdhinen with and without crystal armour; blowpipe with three dart types; void and elite void; scorching bow; dark bow; venator bow; magic shortbow; rune crossbow at 75 Ranged; quiver on and off; Rigour, Deadeye, Eagle Eye; wrong ammunition |
 | Magic | Tumeken's shadow vs every boss; tridents; sanguinesti; Kodai with fire / earth / water / wind surge and matching tomes and weaknesses; harmonised staff speed; smoke battlestaff; brimstone ring; confliction gauntlets; elite void mage; slayer helmet; salve (ei); Eye of Ayak; warped sceptre; Virtus with Ice Barrage; Augury, Mystic Might, Mystic Vigour; mid-level accounts; fire bolt at 50 Magic |
 
-**Expected vs actual.** All 86 scenarios match within the tolerances above; there are **no known differences**.
+**Expected vs actual.** All 364 scenarios match within the tolerances above; there are **no known differences**.
+Scenarios against monsters with unmodelled rules (for example Abyssal Sire, Araxxor) still match the reference
+figures, and the test also checks that the engine labels them as estimates.
 Five examples (full list in the fixture):
 
 | Scenario | Attack roll | Defence roll | Max hit | Accuracy | DPS |

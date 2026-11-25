@@ -173,7 +173,7 @@ public final class GearOptimiser
 		for (BossDefinition.Phase phase : variant.getPhases())
 		{
 			CombatClass cc = strategy.getPhaseStyles().get(phase.getId());
-			MonsterDef monster = data.monster(phase.getMonsterId());
+			MonsterDef monster = data.monster(phase.getMonsterId(), phase.getMonsterVersion());
 			if (cc != null && monster != null)
 			{
 				targets.get(cc).add(new PhaseTarget(phase.getId(), monster, strategy.getPhaseWeights().getOrDefault(phase.getId(), 0.0)));
@@ -1288,7 +1288,7 @@ public final class GearOptimiser
 		{
 			if (strategy.getPhaseStyles().get(phase.getId()) == cc)
 			{
-				targets.add(new PhaseTarget(phase.getId(), data.monster(phase.getMonsterId()),
+				targets.add(new PhaseTarget(phase.getId(), data.monster(phase.getMonsterId(), phase.getMonsterVersion()),
 					strategy.getPhaseWeights().getOrDefault(phase.getId(), 0.0)));
 			}
 		}

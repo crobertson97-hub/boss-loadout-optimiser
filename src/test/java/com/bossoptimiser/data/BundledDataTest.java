@@ -137,7 +137,61 @@ public class BundledDataTest
 				}
 			}
 		}
-		assertEquals(5, registry.supported().size());
+		// Every bundled definition loads; none is silently rejected.
+		assertTrue("Rejected boss definitions: " + registry.problems(), registry.problems().isEmpty());
+		assertEquals(registry.all().size(), registry.supported().size());
+		assertTrue(registry.supported().size() >= 51);
+	}
+
+	/**
+	 * "Validated" is a promise that the DPS shown is exact: a single phase, no assumed phase weights, and no
+	 * monster whose damage rules the engine does not model.
+	 */
+	@Test
+	public void validatedBossesHaveExactDpsAndPartialBossesSayWhy()
+	{
+		for (BossDefinition boss : Fixtures.bosses().supported())
+		{
+			if (boss.getValidationStatus() == BossDefinition.ValidationStatus.VALIDATED)
+			{
+				for (BossDefinition.Variant v : boss.getVariants())
+				{
+					assertEquals(boss.getId() + " is validated but has several phases", 1, v.getPhases().size());
+					for (BossDefinition.Phase p : v.getPhases())
+					{
+						com.bossoptimiser.data.MonsterDef m = data.monster(p.getMonsterId(), p.getMonsterVersion());
+						assertEquals(boss.getId() + " is validated but its DPS is an estimate", null,
+							com.bossoptimiser.combat.Mechanics.monsterUnsupportedReason(m));
+					}
+				}
+				for (BossDefinition.Strategy s : boss.getStrategies())
+				{
+					assertFalse(boss.getId(), s.isWeightsAreHeuristic());
+				}
+			}
+			else
+			{
+				assertNotNull(boss.getId(), boss.getValidationNotes());
+				assertFalse(boss.getId(), boss.getValidationNotes().isEmpty());
+			}
+		}
+	}
+
+	/** Boss text must never advise on protection prayers (Plugin Hub rule on boss mechanics). */
+	@Test
+	public void bossTextGivesNoPrayerAdvice()
+	{
+		for (BossDefinition boss : Fixtures.bosses().supported())
+		{
+			StringBuilder text = new StringBuilder(boss.getValidationNotes()).append(' ');
+			boss.getWarnings().forEach(w -> text.append(w).append(' '));
+			boss.getStrategies().forEach(s -> text.append(s.getDescription()).append(' '));
+			String lower = text.toString().toLowerCase();
+			for (String banned : new String[]{"protect from", "pray mage", "pray range", "pray melee", "prayer switch", "flick"})
+			{
+				assertFalse(boss.getId() + " mentions '" + banned + "'", lower.contains(banned));
+			}
+		}
 	}
 
 	@Test

@@ -137,7 +137,88 @@ add('g20-warped-sceptre-graardor', GRAA, { ...G, weapon: w('Warped sceptre', 'Ch
 add('g21-kodai-ice-barrage-virtus-graardor', GRAA, { ...G, ...VIRTUS, weapon: 'Kodai wand' }, { type: 'magic', stance: 'Autocast' }, { ...MAGIC, spell: 'Ice Barrage' });
 add('g22-kodai-fire-surge-no-weakness-muspah', MM, { ...G, weapon: 'Kodai wand' }, { type: 'magic', stance: 'Autocast' }, { ...MAGIC, spell: 'Fire Surge' });
 add('g23-shadow-vigour-muspah-post-shield', { name: 'Phantom Muspah', version: 'Post-shield' }, { ...G, weapon: SHADOW }, 'Accurate', { boosts: { magic: 10 }, prayers: ['MYSTIC_VIGOUR'] });
+add('g25-shadow-zulrah-blue', ZB, { ...G, weapon: SHADOW }, 'Accurate', MAGIC);
+add('r36-tbow-muspah-melee', MM, { ...R, ...DARROW, weapon: 'Twisted bow' }, 'Rapid', RANGED);
+add('r37-tbow-muspah-post-shield', { name: 'Phantom Muspah', version: 'Post-shield' }, { ...R, ...DARROW, weapon: 'Twisted bow' }, 'Rapid', RANGED);
 add('g24-fire-bolt-midlevel-vorkath', VORK, { weapon: 'Staff of fire', neck: 'Amulet of magic' }, { type: 'magic', stance: 'Autocast' }, { skills: { magic: 50 }, spell: 'Fire Bolt' });
+
+// ---------------------------------------------------------------- every phase of every generated boss
+// One standard top-end setup per style the boss definition offers, plus targeted checks for the bonuses and
+// special rules that apply to that boss. Boss files come from scripts/gen-bosses.mjs.
+const BOSS_DIR = path.join(here, '..', '..', 'src/main/resources/com/bossoptimiser/bosses');
+const HAND_WRITTEN = new Set(['vorkath.json', 'zulrah.json', 'cerberus.json', 'general-graardor.json', 'phantom-muspah.json']);
+const MONSTERS = JSON.parse(fs.readFileSync(path.join(here, '..', '..', 'src/main/resources/com/bossoptimiser/items/monsters.json'), 'utf8')).monsters;
+const STD_MELEE = {
+	stab: [{ ...M, ...DEF, weapon: "Osmumten's fang" }, 'Lunge'],
+	slash: [{ ...M, ...DEF, weapon: 'Abyssal whip' }, 'Lash'],
+	crush: [{ ...M, weapon: 'Abyssal bludgeon' }, 'Pound'],
+};
+const STD = { RANGED: [{ ...R, ...DARROW, weapon: 'Twisted bow' }, 'Rapid'], MAGIC: [{ ...G, weapon: SHADOW }, 'Accurate'] };
+const LEVELS = { MELEE, RANGED, MAGIC };
+const seen = new Set();
+const bossFiles = JSON.parse(fs.readFileSync(path.join(BOSS_DIR, 'index.json'), 'utf8')).bosses.filter((x) => !HAND_WRITTEN.has(x));
+for (const file of bossFiles) {
+	const boss = JSON.parse(fs.readFileSync(path.join(BOSS_DIR, file), 'utf8'));
+	for (const v of boss.variants) {
+		for (const p of v.phases) {
+			const m = MONSTERS.find((x) => x.id === p.monsterId && (!p.monsterVersion || x.version === p.monsterVersion));
+			const monster = { id: m.id, version: m.version };
+			const attrs = m.attributes || [];
+			const classes = new Set(boss.strategies.map((s) => s.phaseStyles[p.id]));
+			for (const cls of classes) {
+				const key = `${m.id}|${m.version}|${cls}`;
+				if (seen.has(key)) continue;
+				seen.add(key);
+				const tag = `b-${boss.id}-${v.id}-${p.id}-${cls.toLowerCase()}`;
+				if (cls === 'MELEE') {
+					// The weakest melee defence decides the weapon.
+					const [stab, slash, crush] = m.defensive;
+					const best = stab <= slash && stab <= crush ? 'stab' : slash <= crush ? 'slash' : 'crush';
+					add(tag, monster, STD_MELEE[best][0], STD_MELEE[best][1], MELEE);
+				} else {
+					add(tag, monster, STD[cls][0], STD[cls][1], LEVELS[cls]);
+				}
+				if (cls === 'MELEE' && attrs.includes('demon')) {
+					add(tag + '-arclight', monster, { ...M, ...DEF, weapon: 'Arclight' }, 'Slash', MELEE);
+				}
+				if (cls === 'MELEE' && attrs.includes('dragon')) {
+					add(tag + '-dhl', monster, { ...M, ...DEF, weapon: 'Dragon hunter lance' }, 'Lunge', MELEE);
+				}
+				if (cls === 'RANGED' && attrs.includes('dragon')) {
+					add(tag + '-dhcb', monster, { ...R, weapon: 'Dragon hunter crossbow', shield: 'Twisted buckler', ammo: 'Diamond dragon bolts (e)' }, 'Rapid', RANGED);
+				}
+				if (cls === 'MELEE' && attrs.includes('undead')) {
+					add(tag + '-salve', monster, { ...M, ...DEF, weapon: 'Abyssal whip', neck: 'Salve amulet(ei)' }, 'Lash', MELEE);
+				}
+				if (boss.slayerTaskRelevant && m.slayer && cls === 'MELEE') {
+					add(tag + '-slayer-helm', monster, { ...M, ...DEF, weapon: "Osmumten's fang", head: 'Slayer helmet (i)' }, 'Lunge', { ...MELEE, buffs: TASK });
+				}
+			}
+		}
+	}
+}
+
+// Immunities and damage modifiers the generated bosses rely on.
+const KRAKEN = { id: 494, version: 'Kraken' };
+add('x-kraken-whip-immune', KRAKEN, { ...M, ...DEF, weapon: 'Abyssal whip' }, 'Lash', MELEE);
+add('x-kraken-tbow-divided', KRAKEN, { ...R, ...DARROW, weapon: 'Twisted bow' }, 'Rapid', RANGED);
+add('x-kraken-blowpipe-divided', KRAKEN, { ...R, weapon: { name: 'Toxic blowpipe', version: 'Charged', dart: 'Dragon dart' } }, 'Rapid', RANGED);
+add('x-leviathan-whip-immune', { id: 12214, version: 'Post-quest' }, { ...M, ...DEF, weapon: 'Abyssal whip' }, 'Lash', MELEE);
+add('x-dusk-tbow-immune', { id: 7851, version: 'First form' }, { ...R, ...DARROW, weapon: 'Twisted bow' }, 'Rapid', RANGED);
+add('x-dusk-shadow-immune', { id: 7887, version: 'Second form' }, { ...G, weapon: SHADOW }, 'Accurate', MAGIC);
+add('x-dawn-whip-immune', { id: 7852, version: '' }, { ...M, ...DEF, weapon: 'Abyssal whip' }, 'Lash', MELEE);
+add('x-dawn-halberd', { id: 7852, version: '' }, { ...M, weapon: 'Noxious halberd' }, 'Swipe', MELEE);
+add('x-kreearra-halberd', { id: 3162, version: '' }, { ...M, weapon: 'Noxious halberd' }, 'Swipe', MELEE);
+const CORP = { id: 319, version: '' };
+add('x-corp-whip-halved', CORP, { ...M, ...DEF, weapon: 'Abyssal whip' }, 'Lash', MELEE);
+add('x-corp-fang-stab', CORP, { ...M, ...DEF, weapon: "Osmumten's fang" }, 'Lunge', MELEE);
+add('x-corp-fang-slash-halved', CORP, { ...M, ...DEF, weapon: "Osmumten's fang" }, 'Slash', MELEE);
+add('x-corp-zhasta-stab', CORP, { ...M, ...DEF, weapon: 'Zamorakian hasta' }, 'Lunge', MELEE);
+add('x-corp-spear-stab', CORP, { ...M, ...DEF, weapon: 'Zamorakian spear' }, 'Lunge', MELEE);
+add('x-corp-halberd-stab', CORP, { ...M, weapon: 'Noxious halberd' }, 'Jab', MELEE);
+add('x-corp-tbow-halved', CORP, { ...R, ...DARROW, weapon: 'Twisted bow' }, 'Rapid', RANGED);
+add('x-corp-ruby-halved', CORP, { ...R, weapon: 'Zaryte crossbow', ammo: 'Ruby dragon bolts (e)' }, 'Rapid', RANGED);
+add('x-corp-shadow', CORP, { ...G, weapon: SHADOW }, 'Accurate', MAGIC);
 
 fs.writeFileSync(path.join(here, 'scenarios.json'), JSON.stringify(out, null, 1));
 console.log(`wrote ${out.length} scenarios`);

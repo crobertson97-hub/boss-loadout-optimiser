@@ -3,6 +3,7 @@ package com.bossoptimiser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -62,6 +63,10 @@ public class PluginLifecycleTest
 	private ClientToolbar clientToolbar;
 	private OverlayManager overlayManager;
 	private BossOptimiserPlugin plugin;
+	private net.runelite.client.plugins.banktags.BankTagsService bankTagsService;
+	private net.runelite.client.plugins.banktags.TagManager tagManager;
+	private net.runelite.client.plugins.PluginManager pluginManager;
+	private net.runelite.client.plugins.banktags.BankTagsPlugin bankTagsPlugin;
 
 	@Before
 	public void setUp()
@@ -72,12 +77,22 @@ public class PluginLifecycleTest
 		itemManager = mock(ItemManager.class);
 		clientToolbar = mock(ClientToolbar.class);
 		overlayManager = mock(OverlayManager.class);
+		bankTagsService = mock(net.runelite.client.plugins.banktags.BankTagsService.class);
+		tagManager = mock(net.runelite.client.plugins.banktags.TagManager.class);
+		pluginManager = mock(net.runelite.client.plugins.PluginManager.class);
+		bankTagsPlugin = mock(net.runelite.client.plugins.banktags.BankTagsPlugin.class);
+		when(pluginManager.getPlugins()).thenReturn(java.util.Collections.singletonList(bankTagsPlugin));
+		when(pluginManager.isPluginEnabled(bankTagsPlugin)).thenReturn(true);
 
 		// The "client thread" runs tasks immediately.
 		doAnswer(invocation -> {
 			((Runnable) invocation.getArgument(0)).run();
 			return null;
 		}).when(clientThread).invokeLater(any(Runnable.class));
+		doAnswer(invocation -> {
+			((Runnable) invocation.getArgument(0)).run();
+			return null;
+		}).when(clientThread).invoke(any(Runnable.class));
 		when(client.getGameState()).thenReturn(GameState.LOGIN_SCREEN);
 		when(itemManager.canonicalize(anyInt())).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -98,6 +113,9 @@ public class PluginLifecycleTest
 				bind(OverlayManager.class).toInstance(overlayManager);
 				bind(Gson.class).toInstance(TestData.GSON);
 				bind(BossOptimiserConfig.class).toInstance(config);
+				bind(net.runelite.client.plugins.banktags.BankTagsService.class).toInstance(bankTagsService);
+				bind(net.runelite.client.plugins.banktags.TagManager.class).toInstance(tagManager);
+				bind(net.runelite.client.plugins.PluginManager.class).toInstance(pluginManager);
 			}
 		}).injectMembers(plugin);
 	}
@@ -260,6 +278,41 @@ public class PluginLifecycleTest
 		assertFalse(service.state().getUpgrades().getUpgrades().isEmpty());
 
 		SwingUtilities.invokeAndWait(plugin::shutDown);
+	}
+
+	/** "Show in bank" uses Bank Tags' public API on the client thread and saves nothing. */
+	@Test
+	public void showInBankRegistersATemporaryTagOnlyWhileTheBankIsOpen() throws Exception
+	{
+		start();
+		final BossOptimiserService service = plugin.service();
+		waitFor(() -> service.state().isDataReady());
+		final java.util.Set<Integer> ids = java.util.Collections.singleton(TestData.item("Rune crossbow").getId());
+		final BossOptimiserService.Environment env = plugin.environmentForTests();
+
+		assertTrue(env.showInBank("x", ids).startsWith("Open your bank first"));
+		org.mockito.Mockito.verifyNoInteractions(tagManager);
+
+		when(pluginManager.isPluginEnabled(bankTagsPlugin)).thenReturn(false);
+		plugin.onWidgetLoaded(widgetLoaded(InterfaceID.BANKMAIN));
+		assertTrue(env.showInBank("x", ids).startsWith("Turn on RuneLite's Bank Tags plugin"));
+
+		when(pluginManager.isPluginEnabled(bankTagsPlugin)).thenReturn(true);
+		assertNull(env.showInBank("x", ids));
+		org.mockito.ArgumentCaptor<net.runelite.client.plugins.banktags.BankTag> tag =
+			org.mockito.ArgumentCaptor.forClass(net.runelite.client.plugins.banktags.BankTag.class);
+		org.mockito.Mockito.verify(tagManager).registerTag(org.mockito.ArgumentMatchers.eq(BossOptimiserPlugin.BANK_VIEW_TAG), tag.capture());
+		org.mockito.Mockito.verify(bankTagsService).openBankTag(BossOptimiserPlugin.BANK_VIEW_TAG,
+			net.runelite.client.plugins.banktags.BankTagsService.OPTION_NO_LAYOUT);
+		assertTrue(tag.getValue().contains(TestData.item("Rune crossbow").getId()));
+		assertFalse(tag.getValue().contains(TestData.item("Abyssal whip").getId()));
+		// Nothing is written to Bank Tags' saved tags.
+		org.mockito.Mockito.verify(tagManager, org.mockito.Mockito.never()).addTag(anyInt(), any(), org.mockito.ArgumentMatchers.anyBoolean());
+
+		when(bankTagsService.getActiveTag()).thenReturn(BossOptimiserPlugin.BANK_VIEW_TAG);
+		SwingUtilities.invokeAndWait(plugin::shutDown);
+		org.mockito.Mockito.verify(bankTagsService).closeBankTag();
+		org.mockito.Mockito.verify(tagManager).unregisterTag(BossOptimiserPlugin.BANK_VIEW_TAG);
 	}
 
 	private static void waitFor(BooleanSupplier condition) throws InterruptedException

@@ -82,8 +82,17 @@ A hit is uniform on `[min, max]` with probability `accuracy`, otherwise a miss. 
 - A successful hit of 0 becomes 1.
 - Ruby bolts: 6% → `min(100, 20% of the monster's current hitpoints)`.
 - Brimstone ring (magic): 25% of attacks are rolled against 90% of the defence roll.
-- Monster rules: immunity (Zulrah and flying monsters vs melee without a halberd), Zulrah's cap (hits above
-  50 become uniform 45–50), flat armour.
+- Monster rules: immunity (Zulrah and flying monsters vs melee without a halberd; the Kraken and the
+  Leviathan vs melee; Dusk vs ranged and magic), Zulrah's cap (hits above 50 become uniform 45–50), flat armour.
+- Kraken: ranged hits are divided by 7 (a hit of 1 or more still deals at least 1).
+- Corporeal Beast: damage is halved unless stabbing with a spear (not the Blue Moon spear), a halberd or
+  Osmumten's fang, or using magic; applied before ruby bolts, whose effect is not halved.
+- Demonbane strength depends on the demon: the weapon's percentage is multiplied by the demon's
+  vulnerability (Duke Sucellus 70%, Yama 120%, others 100%) — e.g. Arclight is +49% against Duke Sucellus.
+- Vardorvis' defence level falls linearly with his hitpoints (post-quest 215 → 145 over 700 HP; quest and
+  awakened versions have their own ranges); at full hitpoints, as evaluated, it is the starting value.
+- Yama's magic defence bonus is 60 outside phase 3 while the player tanking uses magic; a solo player is
+  always the tank, so 60 is used.
 
 `DPS = expected damage of one attack ÷ (attack interval in ticks × 0.6 s)`.
 Interval: weapon speed; −1 on Rapid; 5 when casting (4 with a harmonised nightmare staff and a standard spell).
@@ -91,7 +100,8 @@ Interval: weapon speed; −1 on Rapid; 5 when casting (4 with a harmonised night
 ## Assumptions the optimiser makes
 - Ruby bolts are evaluated at **full hitpoints** (the same convention as the wiki calculator), which
   overstates their average over a kill. Compare with diamond bolts yourself.
-- Zulrah forms are weighted equally; Muspah phases 40/35/5/20. These are stated in the UI.
+- Phase weights of multi-phase bosses are assumptions (Zulrah equal, Muspah 40/35/5/20, the others as in their
+  definitions). These are stated in the UI.
 - Sergeants, minions, specials, thralls, defence-lowering specials and overkill are not included.
 - Potion boosts are assumed to be at their freshly-sipped value.
 

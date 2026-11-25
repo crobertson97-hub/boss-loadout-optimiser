@@ -29,6 +29,9 @@ final class InventorySection extends Section
 	private final JCheckBox minCost = UiKit.check("Min cost");
 	private final WrapArea exclusions = UiKit.wrap("");
 	private final JButton clearExclusions;
+	private final JPanel bankCard = UiKit.card();
+	private final JButton showInBank;
+	private final JButton copyTagTab;
 	private final JPanel planArea = UiKit.stack(6);
 
 	private InventoryPlan shownPlan;
@@ -63,7 +66,50 @@ final class InventorySection extends Section
 		clearExclusions = UiKit.button("Allow excluded supplies again", () -> change(b -> b.excludedItemIds(Collections.emptySet())));
 		prefs.add(clearExclusions);
 		content.add(prefs);
+
+		bankCard.add(UiKit.heading("Bank"));
+		showInBank = UiKit.button("Show in bank", this::showInBank);
+		showInBank.setToolTipText("With the bank open: show only this setup's gear and supplies (temporary; nothing is saved)");
+		copyTagTab = UiKit.button("Copy as bank tag tab", this::copyTagTab);
+		copyTagTab.setToolTipText("Copy a tag tab with this gear and inventory laid out, for Bank Tags' 'Import tag tab'");
+		bankCard.add(showInBank);
+		bankCard.add(copyTagTab);
+		content.add(bankCard);
+
 		content.add(planArea);
+	}
+
+	static final String TAG_TAB_INSTRUCTIONS = "To add it as a tag tab:\n"
+		+ "1. Open your bank.\n"
+		+ "2. Right-click the 'New tag tab' button (the + below the tag tabs on the left).\n"
+		+ "3. Choose 'Import tag tab'.\n\n"
+		+ "The tab is laid out like your inventory (left) and worn gear (right). It belongs to the Bank Tags "
+		+ "plugin from then on: rename, edit or delete it there. Importing the same name again replaces it.";
+
+	private void showInBank()
+	{
+		String problem = controller.showInBank();
+		if (problem != null)
+		{
+			UiKit.info(this, "Show in bank", problem);
+		}
+	}
+
+	private void copyTagTab()
+	{
+		String text = controller.bankTagTabExport();
+		if (text == null)
+		{
+			UiKit.info(this, "Copy as bank tag tab", "Optimise a setup first.");
+		}
+		else if (UiKit.copyToClipboard(text))
+		{
+			UiKit.info(this, "Copy as bank tag tab", "The tag tab is on the clipboard.\n\n" + TAG_TAB_INSTRUCTIONS);
+		}
+		else
+		{
+			UiKit.info(this, "Copy as bank tag tab", "The tag tab could not be copied to the clipboard.");
+		}
 	}
 
 	private static InventoryPlan.Preferences prefsOf(UiState state)
@@ -110,6 +156,10 @@ final class InventorySection extends Section
 		exclusions.setTextIfChanged(excluded == 0 ? "" : excluded + " supply item(s) are excluded from the plan.");
 		exclusions.setVisible(excluded > 0);
 		clearExclusions.setVisible(excluded > 0);
+
+		boolean hasSetup = state.getResult() != null;
+		showInBank.setEnabled(hasSetup);
+		copyTagTab.setEnabled(hasSetup);
 
 		InventoryPlan plan = state.getPlan();
 		if (plan != shownPlan)

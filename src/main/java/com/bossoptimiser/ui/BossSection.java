@@ -46,6 +46,12 @@ import net.runelite.client.ui.components.IconTextField;
 /** Boss, variant, strategy and every assumption the numbers depend on. */
 final class BossSection extends Section
 {
+	private static String sortKey(BossDefinition b)
+	{
+		String n = b.getName().toLowerCase(Locale.ROOT);
+		return n.startsWith("the ") ? n.substring(4) : n;
+	}
+
 	private static final int LIST_ROWS = 7;
 
 	private final IconTextField search = new IconTextField();
@@ -423,6 +429,8 @@ final class BossSection extends Section
 			}
 			matches.add(b);
 		}
+		// Alphabetical, ignoring a leading "The " (so The Leviathan sits under L).
+		matches.sort(java.util.Comparator.comparing(BossSection::sortKey));
 		if (!matches.equals(shownBosses))
 		{
 			shownBosses = matches;

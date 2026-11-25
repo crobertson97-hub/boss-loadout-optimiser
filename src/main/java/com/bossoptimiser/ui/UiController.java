@@ -55,6 +55,19 @@ public interface UiController
 
 	void excludeInventoryItem(int itemId);
 
+	// ---- bank tags
+	/**
+	 * Shows the current setup's items in the bank as a temporary Bank Tags view (nothing is saved).
+	 * @return null when shown, otherwise a message to show the user
+	 */
+	String showInBank();
+
+	/**
+	 * The current setup as text for RuneLite's "Import tag tab" (worn gear and the 28-slot inventory laid
+	 * out as they are planned). Null when there is no setup yet.
+	 */
+	String bankTagTabExport();
+
 	// ---- tile packs
 	List<TilePack> tilePacks(String bossId);
 

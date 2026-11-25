@@ -40,7 +40,8 @@ public final class Mechanics
 
 	/** Monsters with special damage rules that are not modelled (other than the supported bosses). */
 	private static final Set<String> SPECIAL_RULE_MONSTERS = new HashSet<>(Arrays.asList(
-		"Corporeal Beast", "Kraken", "Cave kraken", "Verzik Vitur", "Tekton", "Tekton (enraged)", "Great Olm",
+		// Corporeal Beast, Kraken and the Leviathan's rules are modelled in DpsCalculator.
+		"Verzik Vitur", "Tekton", "Tekton (enraged)", "Great Olm",
 		"Ice demon", "Tormented Demon", "Fragment of Seren", "Slagilith", "Zogre", "Skogre", "Slash Bash",
 		"The Hueycoatl", "Abyssal Sire", "Duke Sucellus", "Yama", "Dusk", "Dawn", "Respiratory system",
 		"Fire Warrior of Lesarkus", "Fareed", "Scurrius", "Giant rat (Scurrius)", "Tanglefoot",

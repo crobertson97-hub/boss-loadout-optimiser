@@ -75,7 +75,8 @@ public class ReferenceValidationTest
 		{
 			prayers.add(Prayer.valueOf(p.getAsString()));
 		}
-		MonsterDef monster = data.monster(s.get("monsterId").getAsInt());
+		MonsterDef monster = data.monster(s.get("monsterId").getAsInt(),
+			s.has("monsterVersion") ? s.get("monsterVersion").getAsString() : null);
 		assertNotNull("Monster missing from bundled data", monster);
 		int dart = s.get("dartId").getAsInt();
 		return CombatInput.builder()
@@ -97,6 +98,42 @@ public class ReferenceValidationTest
 			.monster(monster)
 			.monsterCurrentHp(s.get("monsterCurrentHp").getAsInt())
 			.build();
+	}
+
+	/** Every phase of every offered boss, in every style a strategy uses there, has a reference scenario. */
+	@Test
+	public void everyBossPhaseAndStyleIsCoveredByAReferenceScenario()
+	{
+		Set<String> covered = new java.util.HashSet<>();
+		for (JsonElement el : scenarios())
+		{
+			JsonObject s = el.getAsJsonObject();
+			String type = s.getAsJsonObject("style").get("type").getAsString();
+			String cls = "magic".equals(type) ? "MAGIC" : "ranged".equals(type) ? "RANGED" : "MELEE";
+			MonsterDef m = data.monster(s.get("monsterId").getAsInt(),
+				s.has("monsterVersion") ? s.get("monsterVersion").getAsString() : null);
+			covered.add(m.getId() + "|" + m.getVersion() + "|" + cls);
+		}
+		List<String> missing = new ArrayList<>();
+		for (com.bossoptimiser.bosses.BossDefinition boss : com.bossoptimiser.Fixtures.bosses().supported())
+		{
+			for (com.bossoptimiser.bosses.BossDefinition.Variant v : boss.getVariants())
+			{
+				for (com.bossoptimiser.bosses.BossDefinition.Phase p : v.getPhases())
+				{
+					MonsterDef m = data.monster(p.getMonsterId(), p.getMonsterVersion());
+					for (com.bossoptimiser.bosses.BossDefinition.Strategy st : boss.getStrategies())
+					{
+						String key = m.getId() + "|" + m.getVersion() + "|" + st.getPhaseStyles().get(p.getId()).name();
+						if (!covered.contains(key))
+						{
+							missing.add(boss.getId() + "/" + v.getId() + "/" + p.getId() + " " + st.getPhaseStyles().get(p.getId()).name());
+						}
+					}
+				}
+			}
+		}
+		assertTrue("No reference scenario for: " + missing, missing.isEmpty());
 	}
 
 	private static boolean close(double expected, double actual)
@@ -177,7 +214,14 @@ public class ReferenceValidationTest
 		for (JsonElement el : scenarios())
 		{
 			JsonObject s = el.getAsJsonObject();
-			DpsResult r = calc.calculate(toInput(data, s));
+			CombatInput in = toInput(data, s);
+			DpsResult r = calc.calculate(in);
+			if (Mechanics.monsterUnsupportedReason(in.getMonster()) != null)
+			{
+				// The figures still match the reference, but the engine must label them as estimates.
+				assertTrue(s.get("id").getAsString() + " should be labelled an estimate", !r.isExact());
+				continue;
+			}
 			assertTrue(s.get("id").getAsString() + " should be exact but reported: " + r.getNotes(), r.isExact());
 		}
 	}
