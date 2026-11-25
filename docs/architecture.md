@@ -53,6 +53,27 @@ in code and item icons come from the client.
   1,024 evaluations). This is both the debounce and the cancel button.
 - `shutDown()` calls `service.shutdown()` and `worker.shutdownNow()`; nothing is awaited.
 
+## Performance
+
+Measured on a real 996-item bank (572 equipable items), every boss, strategy and priority
+(`PerformanceBenchmarkTest`, opt-in; see docs/testing.md):
+
+| Priority | Typical | Worst case |
+|---|---|---|
+| Maximum DPS, Budget, Low switch complexity | 5–30 ms | about 100 ms |
+| Balanced | about 0.6 s | about 1.2 s |
+| Survivability | about 0.5 s | about 1.2 s |
+| Slot alternatives / explanations | 1–30 ms | |
+| Upgrade adviser | 0.2–0.5 s | |
+
+Before the 2026-11-25 optimisation pass, Balanced and Survivability averaged 1.2 s with a worst case of
+1.9 s, and some of them hit the search limit. The pass (exact pruning on the weighted defence value,
+branch-and-bound, constant-time "is this item worn" checks) gave the same or a better setup in every
+case: 27 identical, 6 better because the old search had been trimmed.
+
+While playing, the bank overlay reads its settings once and refreshes them only when a setting changes,
+instead of reading the config for every bank item on every frame.
+
 ## Bank snapshot
 
 `OwnedItemsTracker` keeps the last contents of the bank, inventory and worn equipment for the current account.
@@ -80,13 +101,18 @@ For each combat class the strategy uses:
 3. **Shortlist** – each option is scored quickly with a greedy fill, grouped by weapon+ammunition+spell
    (best style per group), and the best 6 groups (max 3 per weapon) go to the full search.
 4. **Pruning** – per slot, an item is dropped if another owned item is at least as good on every relevant
-   statistic (accuracy for the attack type and damage statistic; plus weighted defence and prayer for the
-   Balanced/Survivability priorities). Items that can trigger an effect are never dropped: salve amulets
+   statistic: accuracy for the attack type and the damage statistic, plus, for Balanced/Survivability, the
+   item's contribution to the score's defence part (one weighted sum of its defence bonuses and prayer
+   bonus; exact because both scores are linear in total defence and total prayer). Items whose offence is
+   zero or negative and that add nothing else leave the slot empty. Items that can trigger an effect are never dropped: salve amulets
    vs undead, slayer helmets on task, crystal armour with crystal bows, Inquisitor's with crush, Dizana's
    quiver, brimstone ring, confliction gauntlets, tomes matching the spell.
-5. **Enumeration** – every combination of the remaining candidates is evaluated with the real DPS engine,
-   capped at 20,000 combinations per option (lowest-ranked candidates are trimmed and the result says the
-   search was bounded). A second enumeration forces the complete Void set when it is owned.
+5. **Enumeration** – a depth-first search evaluates combinations of the remaining candidates with the real
+   DPS engine, capped at 20,000 combinations per option (lowest-ranked candidates are trimmed and the result
+   says the search was bounded). For Balanced/Survivability it is a branch-and-bound: a branch is skipped
+   when even this weapon option's best DPS (known exactly from the DPS pass) plus the most defence the
+   remaining slots could add cannot beat the third-best setup already found. A second enumeration forces
+   the complete Void set when it is owned.
 6. **Hybrid strategies** – the heaviest-weighted class is worn; for the others, items not in the worn
    setup are switches. If there are more than the limit (8, or 4 for *Low switch complexity*), slots are
    reverted to the worn item one at a time, always choosing the reversion that costs the least DPS.
@@ -123,7 +149,7 @@ All storage is RuneLite config under group `bossloadoutoptimiser`:
 
 | Key | Scope | Content |
 |---|---|---|
-| `bank.items`, `bank.capturedAt` | account | bank snapshot |
+| `bank.items`, `bank.capturedAt` | account | bank snapshot: written on the first bank read of a session, when the bank is closed, and at most once a minute while banking (never on every withdrawal), and only into the account it belongs to |
 | `profiles.index`, `profile.<id>`, `profiles.last` | account | Boss Profiles (JSON, schema 2) |
 | `tilepacks.index`, `tilepack.<id>` | RuneLite profile | custom tile packs |
 | `tileinstall.<packId>` | RuneLite profile | which markers an install added (for undo) |

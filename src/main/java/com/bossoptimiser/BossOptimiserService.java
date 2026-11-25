@@ -91,6 +91,13 @@ public final class BossOptimiserService implements UiController
 
 	static final String BANK_ITEMS_KEY = "bank.items";
 	static final String BANK_TIME_KEY = "bank.capturedAt";
+	/**
+	 * While banking, the snapshot is written at most this often. It is also written on the first read
+	 * of a session and whenever the bank is closed (see {@link #persistBank}). Every write goes through
+	 * RuneLite's config, which notifies all plugins and may sync the profile, so writing on every
+	 * withdrawal was wasteful.
+	 */
+	static final long BANK_PERSIST_INTERVAL_MS = 60_000;
 	private static final String NOT_READY = "The plugin is still loading its data. Try again in a moment.";
 
 	private final Gson gson;
@@ -101,6 +108,10 @@ public final class BossOptimiserService implements UiController
 	private final AtomicLong optimiseGeneration = new AtomicLong();
 	private final AtomicLong adviseGeneration = new AtomicLong();
 	private final Object lock = new Object();
+	private final Object bankLock = new Object();
+	private boolean bankDirty;
+	private boolean bankItemsChanged;
+	private long lastBankPersist;
 
 	private volatile GameData data;
 	private volatile BossRegistry bosses;
@@ -246,6 +257,12 @@ public final class BossOptimiserService implements UiController
 		{
 			return;
 		}
+		synchronized (bankLock)
+		{
+			bankDirty = false;
+			bankItemsChanged = false;
+			lastBankPersist = 0;
+		}
 		optimiseGeneration.incrementAndGet();
 		adviseGeneration.incrementAndGet();
 		if (accountKey != null)
@@ -312,12 +329,15 @@ public final class BossOptimiserService implements UiController
 		OwnedItems owned = tracker.snapshot();
 		if (container == OwnedItemsTracker.Container.BANK && owned.getAccountKey() != null)
 		{
-			KeyValueStore store = env.accountStore();
-			if (changed)
+			synchronized (bankLock)
 			{
-				store.put(BANK_ITEMS_KEY, OwnedItemsTracker.encode(owned.getBank()));
+				bankDirty = true;
+				bankItemsChanged |= changed;
+				if (lastBankPersist == 0 || now - lastBankPersist >= BANK_PERSIST_INTERVAL_MS)
+				{
+					writeBank(owned);
+				}
 			}
-			store.put(BANK_TIME_KEY, Long.toString(now));
 		}
 		if (!changed && container != OwnedItemsTracker.Container.BANK)
 		{
@@ -327,6 +347,42 @@ public final class BossOptimiserService implements UiController
 		WithdrawList withdraw = data == null || current.getResult() == null ? WithdrawList.EMPTY
 			: WithdrawList.build(data, current.getResult(), current.getPlan(), owned);
 		publish(current.toBuilder().owned(owned).withdrawList(withdraw).build());
+	}
+
+	/**
+	 * Writes any bank changes not yet saved. Call when the bank is closed and before shutting down.
+	 *
+	 * @param currentAccountKey the account whose storage {@link Environment#accountStore()} currently
+	 *                          points at; nothing is written unless it is the account the bank belongs to
+	 */
+	public void persistBank(String currentAccountKey)
+	{
+		OwnedItems owned = tracker.snapshot();
+		if (owned.getAccountKey() == null || !owned.getAccountKey().equals(currentAccountKey))
+		{
+			return;
+		}
+		synchronized (bankLock)
+		{
+			if (bankDirty)
+			{
+				writeBank(owned);
+			}
+		}
+	}
+
+	/** Caller holds bankLock. */
+	private void writeBank(OwnedItems owned)
+	{
+		KeyValueStore store = env.accountStore();
+		if (bankItemsChanged || store.get(BANK_ITEMS_KEY) == null)
+		{
+			store.put(BANK_ITEMS_KEY, OwnedItemsTracker.encode(owned.getBank()));
+		}
+		store.put(BANK_TIME_KEY, Long.toString(owned.getBankCapturedAt()));
+		bankDirty = false;
+		bankItemsChanged = false;
+		lastBankPersist = env.now();
 	}
 
 	public OwnedItems ownedItems()

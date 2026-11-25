@@ -994,7 +994,10 @@ public final class DpsCalculator
 		}
 
 		// A hit that passes the accuracy roll always deals at least 1.
-		transformAll(dists, (d, accurate, p, out) -> out.add(Math.max(d, 1), true, p), false);
+		for (int i = 0; i < dists.size(); i++)
+		{
+			dists.set(i, dists.get(i).accurateZeroToOne());
+		}
 
 		if (crossbow && ("Ruby bolts (e)".equals(ammoName) || "Ruby dragon bolts (e)".equals(ammoName))
 			&& in.getLevels().getHitpoints() >= 10)

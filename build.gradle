@@ -56,7 +56,13 @@ tasks.register('run', JavaExec) {
 	mainClass = pluginMainClass
 
 	jvmArgs "-ea"
-	args "--developer-mode", "--debug"
+	// --developer-mode is required for the Jagex account sign-in panel. Full RuneLite debug logging is
+	// opt-in (gradlew run -PrlDebug, or run-local.ps1 -FullLogs) because it slows the client noticeably.
+	args "--developer-mode"
+	if (project.hasProperty('rlDebug'))
+	{
+		args "--debug"
+	}
 }
 
 tasks.register('shadowJar', Jar) {

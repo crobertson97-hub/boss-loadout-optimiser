@@ -4,8 +4,10 @@ import com.bossoptimiser.data.ItemDef;
 import com.bossoptimiser.data.ItemSlot;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /** An immutable set of worn equipment, at most one item per slot. */
 public final class Loadout
@@ -13,10 +15,21 @@ public final class Loadout
 	public static final Loadout EMPTY = new Loadout(new EnumMap<>(ItemSlot.class));
 
 	private final EnumMap<ItemSlot, ItemDef> items;
+	/**
+	 * Names of the worn items. The DPS engine asks "is X worn?" around a hundred times per evaluation,
+	 * so this set replaces a scan of every slot with one hash lookup.
+	 */
+	private final Set<String> names;
 
 	private Loadout(EnumMap<ItemSlot, ItemDef> items)
 	{
 		this.items = items;
+		Set<String> n = new HashSet<>(items.size() * 2);
+		for (ItemDef d : items.values())
+		{
+			n.add(d.getName());
+		}
+		this.names = n;
 	}
 
 	public static Loadout of(ItemDef... defs)
@@ -76,14 +89,7 @@ public final class Loadout
 
 	public boolean wearing(String name)
 	{
-		for (ItemDef d : items.values())
-		{
-			if (d.getName().equals(name))
-			{
-				return true;
-			}
-		}
-		return false;
+		return names.contains(name);
 	}
 
 	public boolean wearingAny(String... names)

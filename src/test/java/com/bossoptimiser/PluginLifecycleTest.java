@@ -177,8 +177,14 @@ public class PluginLifecycleTest
 		plugin.onItemContainerChanged(new ItemContainerChanged(InventoryID.TRAWLER_REWARDINV, bank));
 		verify(configManager, times(1)).setRSProfileConfiguration(eq(BossOptimiserConfig.GROUP), eq("bank.items"), anyString());
 
+		// A withdrawal straight afterwards is held in memory; closing the bank saves it.
+		ItemContainer after = mock(ItemContainer.class);
+		when(after.getItems()).thenReturn(new Item[]{new Item(385, 500)});
+		plugin.onItemContainerChanged(new ItemContainerChanged(InventoryID.BANK, after));
+		verify(configManager, times(1)).setRSProfileConfiguration(eq(BossOptimiserConfig.GROUP), eq("bank.items"), anyString());
 		WidgetClosed closed = new WidgetClosed(InterfaceID.BANKMAIN, 0, true);
 		plugin.onWidgetClosed(closed);
+		verify(configManager).setRSProfileConfiguration(BossOptimiserConfig.GROUP, "bank.items", "385:500");
 		SwingUtilities.invokeAndWait(plugin::shutDown);
 		assertTrue(true);
 	}

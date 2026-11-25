@@ -168,6 +168,47 @@ public class ServiceIntegrationTest
 	}
 
 	@Test
+	public void bankSnapshotIsSavedOnFirstReadOnCloseAndAtMostOncePerMinute()
+	{
+		login("acct-1");
+		final int whip = TestData.item("Abyssal whip").getId();
+		Map<Integer, Integer> bank = bank();
+		service.onContainer(Container.BANK, bank);
+		final String first = env.accounts.get("acct-1").get(BossOptimiserService.BANK_ITEMS_KEY);
+		assertNotNull("The first read of a session is saved straight away", first);
+		assertTrue(first.contains(whip + ":1"));
+
+		// A withdrawal a few seconds later is kept in memory but not written yet.
+		env.now += 5_000;
+		bank.remove(whip);
+		service.onContainer(Container.BANK, bank);
+		assertFalse(service.state().getOwned().owns(whip));
+		assertEquals(first, env.accounts.get("acct-1").get(BossOptimiserService.BANK_ITEMS_KEY));
+
+		// Closing the bank saves it, but never into a different account's storage.
+		service.persistBank("acct-2");
+		assertEquals(first, env.accounts.get("acct-1").get(BossOptimiserService.BANK_ITEMS_KEY));
+		service.persistBank("acct-1");
+		String afterClose = env.accounts.get("acct-1").get(BossOptimiserService.BANK_ITEMS_KEY);
+		assertFalse(afterClose.contains(whip + ":"));
+		assertEquals(Long.toString(env.now), env.accounts.get("acct-1").get(BossOptimiserService.BANK_TIME_KEY));
+
+		// More than a minute later, the next change is written immediately again.
+		env.now += BossOptimiserService.BANK_PERSIST_INTERVAL_MS + 1;
+		bank.put(whip, 1);
+		service.onContainer(Container.BANK, bank);
+		assertTrue(env.accounts.get("acct-1").get(BossOptimiserService.BANK_ITEMS_KEY).contains(whip + ":1"));
+
+		// Changes still pending when the account switches are dropped, not written to the new account.
+		env.now += 1_000;
+		bank.remove(whip);
+		service.onContainer(Container.BANK, bank);
+		login("acct-2");
+		service.persistBank("acct-2");
+		assertNull(env.accounts.get("acct-2").get(BossOptimiserService.BANK_ITEMS_KEY));
+	}
+
+	@Test
 	public void locksExclusionsAndPrioritiesReoptimise()
 	{
 		login("acct-1");

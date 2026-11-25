@@ -21,6 +21,7 @@ Current results are recorded in [verification-report.md](verification-report.md)
 | `ServiceIntegrationTest` | integration | Start-up, bank updates, boss selection, optimisation, inventory, bank highlight state, tile pack export / import / install / undo, profile save → restart → load, account switching, upgrades, shutdown |
 | `PluginLifecycleTest` | integration (mocked client) | The real `BossOptimiserPlugin`: start-up registers the sidebar button and both overlays, login reads levels, the bank container is read (noted items folded, placeholders skipped) and stored per account, shutdown removes everything, late events are harmless |
 | `ui.PanelSmokeTest` | integration (headless) | The real sidebar is constructed and rendered in every state of the journey without exceptions or a section falling back to its error placeholder |
+| `PerformanceBenchmarkTest` | benchmark (opt-in, skipped by default) | Times every boss, strategy and priority, slot alternatives, explanations and the upgrade adviser against a real bank snapshot, and prints the chosen setups so two versions can be compared. Set `BOSS_BENCH_BANK` to a file holding a `bank.items` value (`id:qty,id:qty,...`), then run `gradlew test --tests "*PerformanceBenchmarkTest" -i`. Bank snapshots are personal data: keep them out of the repository. |
 | `ui.PanelRenderTest` | integration (headless) | Renders every sidebar page at the real 225 px width to `build/ui-preview/*.png` for a visual layout check |
 
 ## Reference validation

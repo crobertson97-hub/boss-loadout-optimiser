@@ -22,22 +22,54 @@ public class BankHighlightOverlay extends WidgetItemOverlay
 {
 	private static final Stroke OUTLINE = new BasicStroke(2f);
 
+	/** Settings as last read; reading the config (and parsing colours) per item per frame is wasteful. */
+	private static final class Settings
+	{
+		final boolean highlight;
+		final boolean equipment;
+		final boolean supplies;
+		final boolean quantities;
+		final Color needed;
+		final Color withdrawn;
+		final Color shortfall;
+
+		Settings(BossOptimiserConfig c)
+		{
+			highlight = c.highlightBank();
+			equipment = c.highlightEquipment();
+			supplies = c.highlightSupplies();
+			quantities = c.showQuantities();
+			needed = c.neededColour();
+			withdrawn = c.withdrawnColour();
+			shortfall = c.shortColour();
+		}
+	}
+
 	private final UiController controller;
 	private final BossOptimiserConfig config;
 	private final ItemManager itemManager;
+	private volatile Settings settings;
 
 	public BankHighlightOverlay(UiController controller, BossOptimiserConfig config, ItemManager itemManager)
 	{
 		this.controller = controller;
 		this.config = config;
 		this.itemManager = itemManager;
+		this.settings = new Settings(config);
 		showOnBank();
+	}
+
+	/** Call when this plugin's settings change. */
+	public void refreshSettings()
+	{
+		settings = new Settings(config);
 	}
 
 	@Override
 	public void renderItemOverlay(Graphics2D graphics, int itemId, WidgetItem widgetItem)
 	{
-		if (!config.highlightBank())
+		final Settings s = settings;
+		if (!s.highlight)
 		{
 			return;
 		}
@@ -55,7 +87,7 @@ public class BankHighlightOverlay extends WidgetItemOverlay
 			return;
 		}
 		boolean supply = entry.getKind() == WithdrawList.Kind.SUPPLY;
-		if ((supply && !config.highlightSupplies()) || (!supply && !config.highlightEquipment()))
+		if ((supply && !s.supplies) || (!supply && !s.equipment))
 		{
 			return;
 		}
@@ -64,17 +96,17 @@ public class BankHighlightOverlay extends WidgetItemOverlay
 		final String text;
 		if (entry.isWithdrawn())
 		{
-			colour = config.withdrawnColour();
+			colour = s.withdrawn;
 			text = "ok";
 		}
 		else if (entry.isMissing())
 		{
-			colour = config.shortColour();
+			colour = s.shortfall;
 			text = entry.getCarried() + entry.getInBank() + "/" + entry.getNeeded();
 		}
 		else
 		{
-			colour = config.neededColour();
+			colour = s.needed;
 			text = "x" + (entry.getNeeded() - entry.getCarried());
 		}
 
@@ -85,7 +117,7 @@ public class BankHighlightOverlay extends WidgetItemOverlay
 		graphics.drawRect(bounds.x, bounds.y, bounds.width - 1, bounds.height - 1);
 		graphics.setStroke(previous);
 
-		if (config.showQuantities())
+		if (s.quantities)
 		{
 			graphics.setFont(FontManager.getRunescapeSmallFont());
 			int x = bounds.x + 1;

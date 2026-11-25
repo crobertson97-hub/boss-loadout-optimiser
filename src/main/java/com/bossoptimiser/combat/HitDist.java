@@ -116,6 +116,20 @@ public final class HitDist
 		return out;
 	}
 
+	/**
+	 * Copy in which every hit that passed the accuracy roll but rolled 0 deals 1 instead (the game's
+	 * rule). Same result as the equivalent {@link #transform}, without the per-cell callback.
+	 */
+	public HitDist accurateZeroToOne()
+	{
+		HitDist out = new HitDist(Math.max(accurate.length, 2));
+		System.arraycopy(accurate, 0, out.accurate, 0, accurate.length);
+		System.arraycopy(inaccurate, 0, out.inaccurate, 0, inaccurate.length);
+		out.accurate[1] += out.accurate[0];
+		out.accurate[0] = 0;
+		return out;
+	}
+
 	public HitDist scaleProbability(double factor)
 	{
 		HitDist out = new HitDist(accurate.length);

@@ -3,15 +3,15 @@
 Date: 2026-11-19 · JDK 21.0.11 targeting Java 11 · Gradle 8.10 · RuneLite client 1.13.7 · Windows 11
 
 **Read this first.** "Working" below means *implemented and covered by an automated test that passed on
-this machine*. It does **not** mean "seen working in the game": no part of this plugin has been run inside a
-logged-in client. A live launch was attempted and is blocked by the network this was built on (see the first
-row). Everything that needs the game is listed under [Needs manual in-game testing](#needs-manual-in-game-testing).
+this machine*. It does **not** mean "seen working in the game": no part of this plugin has been used inside a
+logged-in client. The client has been started with the plugin loaded (see the first row), but nothing after the
+login screen has been checked. Everything that needs the game is listed under [Needs manual in-game testing](#needs-manual-in-game-testing).
 
 ## Build and test results
 
 ```
 powershell -ExecutionPolicy Bypass -File scripts\build.ps1   ->  BUILD SUCCESSFUL
-116 tests, 0 failures, 0 errors, 0 skipped                   (build\reports\tests\test\index.html)
+118 tests, 0 failures, 0 errors, 1 skipped (the opt-in benchmark)   (build\reports\tests\test\index.html)
 build\libs\boss-loadout-optimiser-1.0.0.jar                  (about 600 kB)
 ```
 
@@ -28,16 +28,17 @@ build\libs\boss-loadout-optimiser-1.0.0.jar                  (about 600 kB)
 | `tiles.TilePackTest` | 13 |
 | `profiles.ProfileStoreTest` | 8 |
 | `upgrades.UpgradeAdviserTest` | 5 |
-| `ServiceIntegrationTest` | 9 |
+| `ServiceIntegrationTest` | 10 |
 | `PluginLifecycleTest` | 2 |
 | `ui.PanelSmokeTest` | 2 |
 | `ui.PanelRenderTest` | 1 |
+| `PerformanceBenchmarkTest` (opt-in, skipped unless `BOSS_BENCH_BANK` is set) | 1 |
 
 ## Feature status
 
 | Feature | Status | Evidence |
 |---|---|---|
-| **RuneLite startup** | **Blocked (network) / Untested live.** Start-up wiring: Working | `gradlew run` was executed: the development JVM started, `BossOptimiserPluginTest.main` ran and RuneLite began loading, then RuneLite's own `ClientLoader` failed with HTTP 403 from `api.runelite.net`, `static.runelite.net` and `oldschool.runescape.com` (the work network blocks them), so the client never reached plugin start-up. Substitute evidence: `PluginLifecycleTest` runs the real plugin class against a mocked client — sidebar button and both overlays are registered on `startUp` and removed on `shutDown`. |
+| **RuneLite startup** | **Working (start-up only, seen live)** | On 2026-11-25 `scriptsun-local.ps1` started a real RuneLite 1.13.8 development client on a network that allowed it. `client.log` shows `Loaded plugin BossOptimiserPlugin`, `Boss Loadout Optimiser started` and `Plugin BossOptimiserPlugin is now running`, with no ERROR or WARN lines in the session; the client reached the login screen. Nothing past the login screen has been checked. (An earlier attempt on 2026-11-19 failed with HTTP 403 because that network blocked RuneLite and Jagex servers.) `PluginLifecycleTest` covers the same wiring against a mocked client. |
 | **Bank analysis** | Working (logic) · Untested live | `OwnedItemsTrackerTest`, `PluginLifecycleTest.loginReadsTheAccountAndTheBankIsStoredPerAccount` (container read, noted items, placeholders, per-account persistence), `ServiceIntegrationTest.accountsAreKeptApart`, restart restore in `profilesSurviveARestartAndRestoreTheSavedSetup`. Not verified: that the live client fires the container events as assumed. |
 | **Account capability** | Working (logic) · Untested live | `EligibilityCheckerTest`; requirement data integrity in `BundledDataTest`. Coverage is deliberately partial (about 290 items); everything else is "unknown". Quest/level reads on the real client thread are untested. |
 | **Equipment optimisation** | Working | `GearOptimiserTest` (19): optimum cannot be improved by any single-slot swap; set effects; ammunition; two-handed; locks/exclusions; all five priorities; hybrid switches; deterministic; every item in the game owned at once completes in well under a second. |

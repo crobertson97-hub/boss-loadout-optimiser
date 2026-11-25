@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Logging for the development client started by scripts/run-local.ps1 (test classpath only; not part
+ of the plugin). Based on the logback-test.xml of runelite/example-plugin (BSD 2-Clause).
+
+ Only this plugin logs at DEBUG. Everything else stays at INFO, so the 100+ other plugins in a
+ typical RuneLite profile do not stream debug output through Gradle's console while you play.
+ Pass -FullLogs to run-local.ps1 for full RuneLite debug logging.
+-->
+<configuration>
+	<turboFilter class="net.runelite.client.util.DeduplicationFilter"/>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss zzz} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${user.home}/.runelite/logs/client.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${user.home}/.runelite/logs/client_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss zzz} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="FILE"/>
+	</root>
+	<logger name="com.bossoptimiser" level="DEBUG"/>
+</configuration>

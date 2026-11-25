@@ -42,6 +42,7 @@ import net.runelite.api.gameval.InventoryID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.RuneScapeProfileChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
@@ -145,6 +146,10 @@ public class BossOptimiserPlugin extends Plugin
 	@Override
 	protected void shutDown()
 	{
+		if (client.getGameState() == GameState.LOGGED_IN)
+		{
+			service.persistBank(configManager.getRSProfileKey());
+		}
 		overlayManager.remove(bankOverlay);
 		overlayManager.remove(missingOverlay);
 		clientToolbar.removeNavigation(navigationButton);
@@ -219,6 +224,19 @@ public class BossOptimiserPlugin extends Plugin
 		if (event.getGroupId() == InterfaceID.BANKMAIN)
 		{
 			bankOpen = false;
+			if (service != null)
+			{
+				service.persistBank(configManager.getRSProfileKey());
+			}
+		}
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged event)
+	{
+		if (BossOptimiserConfig.GROUP.equals(event.getGroup()) && bankOverlay != null)
+		{
+			bankOverlay.refreshSettings();
 		}
 	}
 

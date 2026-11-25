@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -388,14 +389,28 @@ public final class GearOptimiser
 		final Priority priority = ctx.request.getPriority();
 		// Pass 1 always maximises DPS: it is the answer for most priorities and the yardstick for the rest.
 		List<OptimisedSetup> dpsRanked = new ArrayList<>();
+		// Each option's best DPS caps what it can score in the Balanced / Survivability pass, which lets
+		// that pass skip combinations that cannot win. Only valid when pass 1 searched exhaustively.
+		final Map<WeaponOption, Double> optionBestDps = new IdentityHashMap<>();
+		final boolean boundedBefore = ctx.bounded;
+		ctx.bounded = false;
 		for (WeaponOption option : shortlist)
 		{
-			dpsRanked.addAll(searchOption(ctx, option, cc, targets, false, 0, 0, 0));
+			List<OptimisedSetup> found = searchOption(ctx, option, cc, targets, false, 0, 0, 0, Double.NaN);
+			double best = 0;
+			for (OptimisedSetup s : found)
+			{
+				best = Math.max(best, s.getDps());
+			}
+			optionBestDps.put(option, best);
+			dpsRanked.addAll(found);
 			if (ctx.cancelled.getAsBoolean())
 			{
 				return Collections.emptyList();
 			}
 		}
+		final boolean pass1Exhaustive = !ctx.bounded;
+		ctx.bounded |= boundedBefore;
 		dpsRanked.sort(setupOrder());
 		if (dpsRanked.isEmpty())
 		{
@@ -421,7 +436,8 @@ public final class GearOptimiser
 			for (WeaponOption option : shortlist)
 			{
 				double[] bounds = defenceBounds(ctx, option);
-				ranked.addAll(searchOption(ctx, option, cc, targets, true, bestDps, bounds[0], bounds[1]));
+				ranked.addAll(searchOption(ctx, option, cc, targets, true, bestDps, bounds[0], bounds[1],
+					pass1Exhaustive ? optionBestDps.get(option) : Double.NaN));
 				if (ctx.cancelled.getAsBoolean())
 				{
 					return Collections.emptyList();
@@ -604,7 +620,7 @@ public final class GearOptimiser
 		}
 	}
 
-	private double defenceStat(Context ctx, ItemDef d)
+	private static double defenceStat(Context ctx, ItemDef d)
 	{
 		double total = 0;
 		for (Map.Entry<String, Double> e : ctx.damageTaken.entrySet())
@@ -673,8 +689,20 @@ public final class GearOptimiser
 		return option.spell != null && option.spell.getElement() != null && n.startsWith("Tome of ");
 	}
 
+	/**
+	 * Weights that turn an item's defence and prayer bonus into its contribution to the Balanced or
+	 * Survivability score. Both scores are linear in total defence and total prayer bonus, so one
+	 * weighted sum per item is enough to compare items exactly.
+	 */
+	private static double[] defenceWeights(Priority priority, double defBound, double prayerBound)
+	{
+		double defWeight = priority == Priority.SURVIVABILITY ? 0.8 : 0.20;
+		double prayerWeight = priority == Priority.SURVIVABILITY ? 0.2 : 0.05;
+		return new double[]{defBound <= 0 ? 0 : defWeight / defBound, prayerBound <= 0 ? 0 : prayerWeight / prayerBound};
+	}
+
 	private List<Candidate> slotCandidates(Context ctx, ItemSlot slot, WeaponOption option, CombatClass cc,
-		List<PhaseTarget> targets, boolean withDefence)
+		List<PhaseTarget> targets, boolean withDefence, double[] weights)
 	{
 		List<Candidate> all = ctx.pool.get(slot);
 		List<Candidate> kept = new ArrayList<>();
@@ -720,12 +748,14 @@ public final class GearOptimiser
 				boolean strict = accB > accA || dmgB > dmgA;
 				if (withDefence)
 				{
-					// Defence and prayer are objectives of their own here.
-					if (defB < defA || prayB < prayA)
+					// Only the weighted sum of defence and prayer enters the score, so compare that.
+					final double valueA = weights[0] * defA + weights[1] * prayA;
+					final double valueB = weights[0] * defB + weights[1] * prayB;
+					if (valueB < valueA - 1e-12)
 					{
 						continue;
 					}
-					strict |= defB > defA || prayB > prayA;
+					strict |= valueB > valueA + 1e-12;
 				}
 				else if (!strict)
 				{
@@ -824,15 +854,19 @@ public final class GearOptimiser
 
 	// ------------------------------------------------------------------ enumeration
 
+	/**
+	 * @param dpsCeiling the option's highest achievable DPS (from the exhaustive DPS pass), or NaN when
+	 *                   unknown. Only used to skip hopeless combinations in the Balanced / Survivability pass.
+	 */
 	private List<OptimisedSetup> searchOption(Context ctx, WeaponOption option, CombatClass cc, List<PhaseTarget> targets,
-		boolean withDefence, double bestDps, double defBound, double prayerBound)
+		boolean withDefence, double bestDps, double defBound, double prayerBound, double dpsCeiling)
 	{
 		List<OptimisedSetup> results = new ArrayList<>();
-		results.addAll(enumerate(ctx, option, cc, targets, withDefence, bestDps, defBound, prayerBound, null));
+		results.addAll(enumerate(ctx, option, cc, targets, withDefence, bestDps, defBound, prayerBound, dpsCeiling, null));
 		Map<ItemSlot, Candidate> voidSet = voidSet(ctx, cc);
 		if (voidSet != null)
 		{
-			results.addAll(enumerate(ctx, option, cc, targets, withDefence, bestDps, defBound, prayerBound, voidSet));
+			results.addAll(enumerate(ctx, option, cc, targets, withDefence, bestDps, defBound, prayerBound, dpsCeiling, voidSet));
 		}
 		results.sort(setupOrder());
 		return results.size() > 3 ? new ArrayList<>(results.subList(0, 3)) : results;
@@ -873,7 +907,8 @@ public final class GearOptimiser
 	}
 
 	private List<OptimisedSetup> enumerate(Context ctx, WeaponOption option, CombatClass cc, List<PhaseTarget> targets,
-		boolean withDefence, double bestDps, double defBound, double prayerBound, Map<ItemSlot, Candidate> forced)
+		boolean withDefence, double bestDps, double defBound, double prayerBound, double dpsCeiling,
+		Map<ItemSlot, Candidate> forced)
 	{
 		final List<ItemSlot> slots = new ArrayList<>();
 		final List<List<Candidate>> lists = new ArrayList<>();
@@ -894,7 +929,8 @@ public final class GearOptimiser
 			}
 			else
 			{
-				list = new ArrayList<>(slotCandidates(ctx, slot, option, cc, targets, withDefence));
+				list = new ArrayList<>(slotCandidates(ctx, slot, option, cc, targets, withDefence,
+					defenceWeights(ctx.request.getPriority(), defBound, prayerBound)));
 			}
 			slots.add(slot);
 			lists.add(list);
@@ -930,45 +966,137 @@ public final class GearOptimiser
 			product = product(lists);
 		}
 
-		final List<OptimisedSetup> top = new ArrayList<>();
-		final int[] index = new int[lists.size()];
-		final Map<ItemSlot, ItemDef> items = new EnumMap<>(ItemSlot.class);
-		while (true)
-		{
-			if ((ctx.evaluated & 0x3FF) == 0 && ctx.cancelled.getAsBoolean())
-			{
-				return Collections.emptyList();
-			}
-			items.clear();
-			items.put(ItemSlot.WEAPON, option.weapon.def);
-			for (int i = 0; i < index.length; i++)
-			{
-				Candidate c = lists.get(i).get(index[i]);
-				if (c != null)
-				{
-					items.put(slots.get(i), c.def);
-				}
-			}
-			Loadout loadout = Loadout.of(items);
-			OptimisedSetup setup = score(ctx, option, cc, loadout, targets, withDefence, bestDps, defBound, prayerBound);
-			ctx.evaluated++;
-			insertTop(top, setup, 3);
+		final Search search = new Search();
+		search.ctx = ctx;
+		search.option = option;
+		search.cc = cc;
+		search.targets = targets;
+		search.withDefence = withDefence;
+		search.bestDps = bestDps;
+		search.defBound = defBound;
+		search.prayerBound = prayerBound;
+		search.slots = slots;
+		search.lists = lists;
+		search.chosen = new Candidate[lists.size()];
+		search.suffix = new double[lists.size() + 1];
 
-			int i = 0;
-			while (i < index.length)
+		if (withDefence)
+		{
+			// Each item's exact contribution to the defence part of the score (see defenceWeights).
+			final double[] weights = defenceWeights(ctx.request.getPriority(), defBound, prayerBound);
+			search.values = new double[lists.size()][];
+			for (int i = lists.size() - 1; i >= 0; i--)
 			{
-				if (++index[i] < lists.get(i).size())
+				// Highest-value items first, so good setups are found early and the cut-off bites sooner.
+				// The order cannot change the result: ties are broken by a total order (setupOrder).
+				List<Candidate> sorted = new ArrayList<>(lists.get(i));
+				sorted.sort(Comparator.comparingDouble((Candidate c) -> -itemValue(ctx, c, weights)));
+				lists.set(i, sorted);
+				search.values[i] = new double[sorted.size()];
+				double max = Double.NEGATIVE_INFINITY;
+				for (int k = 0; k < sorted.size(); k++)
 				{
-					break;
+					search.values[i][k] = itemValue(ctx, sorted.get(k), weights);
+					max = Math.max(max, search.values[i][k]);
 				}
-				index[i++] = 0;
+				search.suffix[i] = search.suffix[i + 1] + (sorted.isEmpty() ? 0 : max);
 			}
-			if (i == index.length)
+			search.weaponValue = itemValue(ctx, option.weapon, weights);
+			if (!Double.isNaN(dpsCeiling) && bestDps > 0)
 			{
-				break;
+				// Slack covers the 1e-7 tie-break term of the DPS pass and floating-point noise.
+				final double ceiling = (dpsCeiling * (1 + 1e-9) + 1e-6) / bestDps;
+				search.bounding = true;
+				if (ctx.request.getPriority() == Priority.SURVIVABILITY)
+				{
+					search.useValue = ceiling >= SURVIVABILITY_DPS_FLOOR;
+					search.base = search.useValue ? 1 : ceiling;
+				}
+				else
+				{
+					search.useValue = true;
+					search.base = 0.75 * ceiling;
+				}
 			}
 		}
-		return top;
+
+		search.descend(0, search.weaponValue);
+		return search.cancelled ? Collections.<OptimisedSetup>emptyList() : search.top;
+	}
+
+	private static double itemValue(Context ctx, Candidate c, double[] weights)
+	{
+		return c == null ? 0 : weights[0] * defenceStat(ctx, c.def) + weights[1] * c.def.getPrayer();
+	}
+
+	/** Depth-first enumeration of one weapon option's candidate lists, with an optional exact cut-off. */
+	private final class Search
+	{
+		Context ctx;
+		WeaponOption option;
+		CombatClass cc;
+		List<PhaseTarget> targets;
+		boolean withDefence;
+		double bestDps;
+		double defBound;
+		double prayerBound;
+		List<ItemSlot> slots;
+		List<List<Candidate>> lists;
+		Candidate[] chosen;
+		/** values[i][k]: score contribution of candidate k of list i (defence priorities only). */
+		double[][] values;
+		/** suffix[i]: the most that lists i onwards can still add to the score. */
+		double[] suffix;
+		double weaponValue;
+		boolean bounding;
+		boolean useValue;
+		double base;
+		final List<OptimisedSetup> top = new ArrayList<>();
+		final Map<ItemSlot, ItemDef> items = new EnumMap<>(ItemSlot.class);
+		long nodes;
+		boolean cancelled;
+
+		void descend(int depth, double value)
+		{
+			if ((++nodes & 0x3FF) == 0 && ctx.cancelled.getAsBoolean())
+			{
+				cancelled = true;
+			}
+			if (cancelled)
+			{
+				return;
+			}
+			if (bounding && top.size() == 3)
+			{
+				double upper = base + (useValue ? value + suffix[depth] : 0);
+				if (upper < top.get(2).getScore() - 1e-12)
+				{
+					return;
+				}
+			}
+			if (depth == lists.size())
+			{
+				items.clear();
+				items.put(ItemSlot.WEAPON, option.weapon.def);
+				for (int i = 0; i < chosen.length; i++)
+				{
+					if (chosen[i] != null)
+					{
+						items.put(slots.get(i), chosen[i].def);
+					}
+				}
+				OptimisedSetup setup = score(ctx, option, cc, Loadout.of(items), targets, withDefence, bestDps, defBound, prayerBound);
+				ctx.evaluated++;
+				insertTop(top, setup, 3);
+				return;
+			}
+			List<Candidate> list = lists.get(depth);
+			for (int k = 0; k < list.size() && !cancelled; k++)
+			{
+				chosen[depth] = list.get(k);
+				descend(depth + 1, value + (values == null ? 0 : values[depth][k]));
+			}
+		}
 	}
 
 	private static long product(List<List<Candidate>> lists)
@@ -1100,8 +1228,10 @@ public final class GearOptimiser
 		else
 		{
 			double dpsNorm = bestDps <= 0 ? 0 : dps / bestDps;
-			double defNorm = defBound <= 0 ? 0 : Math.max(0, def) / defBound;
-			double prayerNorm = prayerBound <= 0 ? 0 : Math.max(0, totals.prayer) / prayerBound;
+			// Linear in total defence and prayer (no clipping at zero): slotCandidates relies on that to
+			// compare items by one weighted value. Negative totals simply count against the setup.
+			double defNorm = defBound <= 0 ? 0 : def / defBound;
+			double prayerNorm = prayerBound <= 0 ? 0 : (double) totals.prayer / prayerBound;
 			if (ctx.request.getPriority() == Priority.SURVIVABILITY)
 			{
 				score = dpsNorm >= SURVIVABILITY_DPS_FLOOR ? 1 + 0.8 * defNorm + 0.2 * prayerNorm : dpsNorm;

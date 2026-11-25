@@ -49,16 +49,25 @@ powershell -ExecutionPolicy Bypass -File scripts\run-local.ps1
 macOS/Linux: `./gradlew run`
 
 This starts a real RuneLite client (developer mode) with the plugin side-loaded through
-`BossOptimiserPluginTest`. **This is the supported way to run an unpublished plugin.** You cannot install it
+`BossOptimiserPluginTest`. The first launch after a reboot (or after the code changes) spends 10–20 s in
+Gradle; later launches reuse a Gradle process that stays in the background and add only about a second
+before RuneLite's own start-up (about 13 s). Only this plugin logs at debug level; for full RuneLite debug
+logging use `scripts\run-local.ps1 -FullLogs`, which makes the client noticeably slower. **This is the supported way to run an unpublished plugin.** You cannot install it
 by copying a JAR into your normal RuneLite; a normal RuneLite only loads hub plugins that have been reviewed.
 
 In IntelliJ you can instead run the `main` method of `src/test/java/com/bossoptimiser/BossOptimiserPluginTest.java`
-(add VM option `-ea` and program arguments `--developer-mode --debug`).
+(add VM option `-ea` and program argument `--developer-mode`).
 
-**Logging in.** Development clients cannot use the Jagex Launcher directly. Follow
-<https://github.com/runelite/runelite/wiki/Using-Jagex-Accounts> once (it has you run the launcher with a flag
-that writes `credentials.properties` into `~/.runelite`); the development client then logs in with those.
-Delete that file when you are done testing. The development client shares `~/.runelite` (settings, ground
+**Logging in.** Development clients cannot be started from the Jagex Launcher, so you sign in from inside
+the client instead (see <https://github.com/runelite/runelite/wiki/Using-Jagex-Accounts>):
+
+1. Start the client with `scripts\run-local.ps1`. That already runs it in developer mode.
+2. In the client's sidebar, open the Jagex account panel (it only exists in developer mode).
+3. Click **Add Jagex Account** and sign in to your Jagex account in the window that pops up.
+4. Your characters are then listed in that panel. Select the one you want to play.
+5. Click **Play Now** on the game's login screen.
+
+You only sign in once; after that it is steps 4 and 5. The development client shares `~/.runelite` (settings, ground
 markers) with your normal client — a reason the plugin is careful with ground markers.
 
 ## 5. Manual test script
@@ -112,7 +121,7 @@ because driving the game client with automation is against Jagex's rules. Please
 | Symptom | Cause / fix |
 |---|---|
 | `java.io.IOException: Unable to establish loopback connection` from Gradle | Java cannot create its internal socket files in `%TEMP%` (seen on this machine, whose temp path is the short form `C:\Users\CALLUM~1.ROB\…`). **Use the scripts in `scripts\`**: they set `JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=<project>\.tmp\sock`. To run `gradlew` by hand: `. .\scripts\_env.ps1` first. In IntelliJ add that `-D…` option to *Gradle → VM options*. |
-| Client window never appears; log shows `error fetching runtime config`, `Failed to get jav_config`, HTTP 403 | The network blocks RuneLite / Jagex servers (seen on the work Wi-Fi on 2026-11-19: `api.runelite.net`, `static.runelite.net` and `oldschool.runescape.com` all returned 403). Nothing in the plugin can change that. Launch on a network that allows the game. Building and testing do **not** need those servers once dependencies are cached. |
+| Client window never appears; log shows `error fetching runtime config`, `Failed to get jav_config`, `Error loading RS!`, HTTP 403 | Something between the PC and the internet is blocking RuneLite / Jagex servers. On the work laptop this is the **Cato Networks security client installed on the laptop itself** (checked 2026-11-19: it signs every HTTPS connection and returns 403 for `api.runelite.net`, `static.runelite.net` and `oldschool.runescape.com`), so it applies on any network, including a phone hotspot. Nothing in the plugin can change that and it should not be worked around. Run the client on a personal computer instead: clone the repository there and use the same script. Building and testing do **not** need those servers once dependencies are cached. |
 | `No JDK found` / `javac` missing | `JAVA_HOME` points at a JRE. Install a JDK or set `JAVA_HOME` to one; the scripts search `C:\Program Files\Java` and `Eclipse Adoptium`. |
 | `Could not resolve net.runelite:client` | No access to `repo.runelite.net` (proxy/VPN). On a TLS-inspecting corporate network Java must trust the inspection root CA; `~/.gradle/gradle.properties` on this machine already sets `javax.net.ssl.trustStoreType=Windows-ROOT`. |
 | Client starts but the plugin is missing | It was started some other way than `scripts\run-local.ps1` / `BossOptimiserPluginTest`. |
