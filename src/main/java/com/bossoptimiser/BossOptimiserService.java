@@ -215,10 +215,13 @@ public final class BossOptimiserService implements UiController
 				{
 					task.run();
 				}
-				catch (RuntimeException e)
+				catch (Throwable e)
 				{
-					log.warn("Background task failed", e);
-					publish(state.toBuilder().optimising(false).advising(false).status("Something went wrong: " + e.getMessage())
+					// Errors as well as exceptions: anything escaping here would otherwise be swallowed by the
+					// executor and leave the sidebar showing "Optimising..." for ever.
+					log.warn("Boss Loadout Optimiser: background task failed", e);
+					publish(state.toBuilder().optimising(false).advising(false)
+						.status("Something went wrong (" + e.getClass().getSimpleName() + "). Details are in client.log.")
 						.statusIsError(true).build());
 				}
 			});
@@ -383,6 +386,29 @@ public final class BossOptimiserService implements UiController
 		bankDirty = false;
 		bankItemsChanged = false;
 		lastBankPersist = env.now();
+	}
+
+	/**
+	 * Item ids the plugin may need a price for: every equipable item (upgrade adviser), every supply,
+	 * rune and weapon-charge item (inventory planner, running costs) and everything the account owns.
+	 * Empty until the bundled data has loaded.
+	 */
+	public Set<Integer> priceableItemIds()
+	{
+		final GameData loaded = data;
+		final SupplyCatalogue catalogue = supplies;
+		if (loaded == null || catalogue == null)
+		{
+			return Collections.emptySet();
+		}
+		Set<Integer> ids = new HashSet<>();
+		for (ItemDef d : loaded.items())
+		{
+			ids.add(d.getId());
+		}
+		ids.addAll(catalogue.allItemIds());
+		ids.addAll(tracker.snapshot().allIds());
+		return ids;
 	}
 
 	public OwnedItems ownedItems()

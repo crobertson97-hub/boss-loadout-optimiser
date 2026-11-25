@@ -11,7 +11,7 @@ login screen has been checked. Everything that needs the game is listed under [N
 
 ```
 powershell -ExecutionPolicy Bypass -File scripts\build.ps1   ->  BUILD SUCCESSFUL
-118 tests, 0 failures, 0 errors, 1 skipped (the opt-in benchmark)   (build\reports\tests\test\index.html)
+119 tests, 0 failures, 0 errors, 1 skipped (the opt-in benchmark)   (build\reports\tests\test\index.html)
 build\libs\boss-loadout-optimiser-1.0.0.jar                  (about 600 kB)
 ```
 
@@ -29,7 +29,7 @@ build\libs\boss-loadout-optimiser-1.0.0.jar                  (about 600 kB)
 | `profiles.ProfileStoreTest` | 8 |
 | `upgrades.UpgradeAdviserTest` | 5 |
 | `ServiceIntegrationTest` | 10 |
-| `PluginLifecycleTest` | 2 |
+| `PluginLifecycleTest` | 3 |
 | `ui.PanelSmokeTest` | 2 |
 | `ui.PanelRenderTest` | 1 |
 | `PerformanceBenchmarkTest` (opt-in, skipped unless `BOSS_BENCH_BANK` is set) | 1 |

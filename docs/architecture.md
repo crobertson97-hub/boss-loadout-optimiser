@@ -74,6 +74,19 @@ case: 27 identical, 6 better because the old search had been trimmed.
 While playing, the bank overlay reads its settings once and refreshes them only when a setting changes,
 instead of reading the config for every bank item on every frame.
 
+## Prices
+
+`ItemManager.getItemPrice` reads item definitions, which the game client only allows on the client thread (it throws
+anywhere else). The plugin therefore copies prices for every equipable item, supply, rune, weapon-charge item and
+owned item into an immutable snapshot on the client thread: 400 items per game tick, so a refresh never causes a
+hitch, repeated every 10 minutes. Background work (optimiser running costs, inventory planner, upgrade adviser)
+only reads the snapshot. Until the first snapshot exists, a few seconds after logging in, prices are reported as
+unavailable rather than as zero. `PluginLifecycleTest.optimiseFinishesAndPricesAreOnlyReadOnTheClientThread` fails if
+any price is read off the client thread.
+
+Every background task catches all failures, errors included, logs them and shows them in the sidebar, so a
+failure can never leave the sidebar showing "Optimising..." for ever.
+
 ## Bank snapshot
 
 `OwnedItemsTracker` keeps the last contents of the bank, inventory and worn equipment for the current account.

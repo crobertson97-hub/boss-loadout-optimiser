@@ -192,6 +192,27 @@ public final class SupplyCatalogue
 		return cost;
 	}
 
+	/** Every item id this catalogue can recommend or price: supplies, runes and weapon-charge items. */
+	public java.util.Set<Integer> allItemIds()
+	{
+		java.util.Set<Integer> ids = new java.util.HashSet<>();
+		for (Family f : families.values())
+		{
+			for (int id : f.getIds())
+			{
+				ids.add(id);
+			}
+		}
+		for (ChargeCost cost : chargeCosts.values())
+		{
+			for (ChargeItem item : cost.getItems())
+			{
+				ids.add(item.getId());
+			}
+		}
+		return ids;
+	}
+
 	/** Reverse lookup used by bank highlighting: which family and dose an item id is. */
 	public Family familyOf(int itemId)
 	{

@@ -1,6 +1,7 @@
 package com.bossoptimiser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,9 +16,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.bossoptimiser.optimiser.Priority;
 import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BooleanSupplier;
 import javax.swing.SwingUtilities;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -187,6 +191,88 @@ public class PluginLifecycleTest
 		verify(configManager).setRSProfileConfiguration(BossOptimiserConfig.GROUP, "bank.items", "385:500");
 		SwingUtilities.invokeAndWait(plugin::shutDown);
 		assertTrue(true);
+	}
+
+	/**
+	 * Regression test for "Optimise never finishes". The real game client throws when item definitions
+	 * (and therefore prices) are read off the client thread; the optimiser used to do exactly that from
+	 * its background thread, the error was swallowed and the sidebar span for ever. The mocked price
+	 * lookup here throws the same way.
+	 */
+	@Test(timeout = 60_000)
+	public void optimiseFinishesAndPricesAreOnlyReadOnTheClientThread() throws Exception
+	{
+		final Thread gameThread = Thread.currentThread();
+		final AtomicInteger offThreadPriceCalls = new AtomicInteger();
+		when(itemManager.getItemPrice(anyInt())).thenAnswer(invocation -> {
+			if (Thread.currentThread() != gameThread)
+			{
+				offThreadPriceCalls.incrementAndGet();
+				throw new AssertionError("must be called on client thread");
+			}
+			return 1000L;
+		});
+		final ItemComposition real = composition(false);
+		when(itemManager.getItemComposition(anyInt())).thenReturn(real);
+
+		start();
+		final BossOptimiserService service = plugin.service();
+		waitFor(() -> service.state().isDataReady());
+		assertEquals("No prices until the snapshot exists", "unavailable", service.priceSourceDescription());
+
+		when(client.getGameState()).thenReturn(GameState.LOGGED_IN);
+		when(configManager.getRSProfileKey()).thenReturn("rsprofile.test");
+		when(client.getRealSkillLevel(any(Skill.class))).thenReturn(99);
+		when(client.getIntStack()).thenReturn(new int[]{2});
+		Player player = mock(Player.class);
+		when(player.getName()).thenReturn("Tester");
+		when(client.getLocalPlayer()).thenReturn(player);
+		GameStateChanged loggedIn = new GameStateChanged();
+		loggedIn.setGameState(GameState.LOGGED_IN);
+		plugin.onGameStateChanged(loggedIn);
+
+		// Game ticks on this ("client") thread: account sync, then the price snapshot in batches.
+		for (int i = 0; i < 40; i++)
+		{
+			plugin.onGameTick(new GameTick());
+		}
+		assertTrue(service.priceSourceDescription(), service.priceSourceDescription().startsWith("RuneLite's price cache"));
+		assertEquals(1000, service.price(TestData.item("Broad bolts").getId()));
+
+		ItemContainer bank = mock(ItemContainer.class);
+		when(bank.getItems()).thenReturn(new Item[]{
+			new Item(TestData.item("Rune crossbow").getId(), 1), new Item(TestData.item("Broad bolts").getId(), 500)});
+		plugin.onItemContainerChanged(new ItemContainerChanged(InventoryID.BANK, bank));
+
+		// Budget prices ammunition on the background thread; it must use the snapshot.
+		service.select(service.state().getSelection().toBuilder()
+			.bossId("vorkath").variantId("post-quest").strategyId("ranged").priority(Priority.BUDGET).build());
+		service.optimise();
+		waitFor(() -> !service.state().isOptimising() && service.state().getResult() != null);
+		assertEquals(0, offThreadPriceCalls.get());
+		assertFalse(service.state().getStatus(), service.state().isStatusIsError());
+		assertEquals("Rune crossbow", service.state().getResult().primary().getLoadout().weapon().getName());
+		assertTrue(service.state().getResult().primary().getCostPerHour() > 0);
+
+		service.findUpgrades(0);
+		waitFor(() -> !service.state().isAdvising() && service.state().getUpgrades() != null);
+		assertEquals(0, offThreadPriceCalls.get());
+		assertFalse(service.state().getUpgrades().getUpgrades().isEmpty());
+
+		SwingUtilities.invokeAndWait(plugin::shutDown);
+	}
+
+	private static void waitFor(BooleanSupplier condition) throws InterruptedException
+	{
+		final long deadline = System.currentTimeMillis() + 30_000;
+		while (!condition.getAsBoolean())
+		{
+			if (System.currentTimeMillis() > deadline)
+			{
+				throw new AssertionError("Timed out waiting for the background work to finish");
+			}
+			Thread.sleep(20);
+		}
 	}
 
 	private static WidgetLoaded widgetLoaded(int groupId)

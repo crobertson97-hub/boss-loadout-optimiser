@@ -99,6 +99,21 @@ public class BossOptimiserPlugin extends Plugin
 	private volatile boolean bankOpen;
 	/** Set when levels, name or quest states should be re-read on the next game tick. */
 	private boolean accountDirty;
+
+	/*
+	 * Prices. ItemManager.getItemPrice reads item definitions, which the game only allows on the client
+	 * thread (it throws elsewhere). The optimiser runs on a background thread, so prices are copied into
+	 * an immutable snapshot on the client thread, a batch per game tick so a refresh never causes a
+	 * visible hitch, and the background work only ever reads the snapshot.
+	 */
+	private static final int PRICE_BATCH_PER_TICK = 400;
+	private static final long PRICE_REFRESH_MS = 10 * 60_000L;
+	private static final long PRICE_RETRY_MS = 30_000L;
+	private volatile Map<Integer, Long> priceSnapshot = java.util.Collections.emptyMap();
+	private volatile long priceSnapshotAt;
+	private long priceAttemptAt;
+	private java.util.Iterator<Integer> pricePending;
+	private Map<Integer, Long> priceBuilding;
 	private final Map<Skill, Integer> knownLevels = new java.util.EnumMap<>(Skill.class);
 
 	@Provides
@@ -143,6 +158,12 @@ public class BossOptimiserPlugin extends Plugin
 		log.debug("Boss Loadout Optimiser started");
 	}
 
+	/** For tests. */
+	BossOptimiserService service()
+	{
+		return service;
+	}
+
 	@Override
 	protected void shutDown()
 	{
@@ -161,6 +182,11 @@ public class BossOptimiserPlugin extends Plugin
 		service = null;
 		worker = null;
 		bankOpen = false;
+		priceSnapshot = java.util.Collections.emptyMap();
+		priceSnapshotAt = 0;
+		priceAttemptAt = 0;
+		pricePending = null;
+		priceBuilding = null;
 		log.debug("Boss Loadout Optimiser stopped");
 	}
 
@@ -204,6 +230,61 @@ public class BossOptimiserPlugin extends Plugin
 		{
 			accountDirty = false;
 			syncAccount();
+		}
+		refreshPricesStep();
+	}
+
+	/** Client thread only. Advances a price refresh by one batch, starting one when due. */
+	private void refreshPricesStep()
+	{
+		if (service == null)
+		{
+			return;
+		}
+		final long now = System.currentTimeMillis();
+		if (pricePending == null)
+		{
+			boolean due = priceSnapshotAt == 0 ? now - priceAttemptAt >= PRICE_RETRY_MS : now - priceSnapshotAt >= PRICE_REFRESH_MS;
+			if (!due)
+			{
+				return;
+			}
+			java.util.Set<Integer> ids = service.priceableItemIds();
+			if (ids.isEmpty())
+			{
+				return;
+			}
+			priceAttemptAt = now;
+			pricePending = ids.iterator();
+			priceBuilding = new HashMap<>(ids.size() * 2);
+		}
+		for (int n = 0; n < PRICE_BATCH_PER_TICK && pricePending.hasNext(); n++)
+		{
+			final int id = pricePending.next();
+			try
+			{
+				final long price = itemManager.getItemPrice(id);
+				if (price > 0)
+				{
+					priceBuilding.put(id, price);
+				}
+			}
+			catch (RuntimeException e)
+			{
+				log.debug("No price for item {}", id, e);
+			}
+		}
+		if (!pricePending.hasNext())
+		{
+			// The client loads its price list shortly after start-up; an empty result means "not yet".
+			if (!priceBuilding.isEmpty())
+			{
+				priceSnapshot = java.util.Collections.unmodifiableMap(priceBuilding);
+				priceSnapshotAt = now;
+				log.debug("Price snapshot refreshed: {} items", priceBuilding.size());
+			}
+			pricePending = null;
+			priceBuilding = null;
 		}
 	}
 
@@ -465,25 +546,21 @@ public class BossOptimiserPlugin extends Plugin
 			}
 		};
 
+		/** Reads only the snapshot, so it is safe from any thread. */
 		private final PriceSource prices = new PriceSource()
 		{
 			@Override
 			public long price(int itemId)
 			{
-				try
-				{
-					return itemManager.getItemPrice(itemId);
-				}
-				catch (RuntimeException e)
-				{
-					return 0;
-				}
+				final Long price = priceSnapshot.get(itemId);
+				return price == null ? 0 : price;
 			}
 
 			@Override
 			public String describe()
 			{
-				return "RuneLite's built-in price cache (Grand Exchange / OSRS Wiki prices, refreshed by the client roughly every 30 minutes)";
+				return "RuneLite's price cache (OSRS Wiki / Grand Exchange prices), read "
+					+ new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date(priceSnapshotAt));
 			}
 		};
 
@@ -508,7 +585,8 @@ public class BossOptimiserPlugin extends Plugin
 		@Override
 		public PriceSource prices()
 		{
-			return prices;
+			// Until the first snapshot exists, report prices as unavailable rather than as zero.
+			return priceSnapshot.isEmpty() ? null : prices;
 		}
 
 		@Override

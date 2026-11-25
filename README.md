@@ -79,7 +79,8 @@ Markers*.
 - **Ruby bolts** are evaluated at full boss hitpoints (wiki-calculator convention), which flatters them.
 - **Survivability** uses weighted defence bonuses and prayer bonus. It is a comparison heuristic, not a
   probability of surviving.
-- **Budget** costs cover ammunition, runes and weapon charges only, at the client's cached prices.
+- **Budget** costs cover ammunition, runes and weapon charges only, at the client's cached prices. Prices
+  become available a few seconds after you log in; until then Budget ranks by DPS and says so.
 - **Upgrades** only consider tradeable items with a price; untradeable upgrades are not suggested.
 - **Prayers:** Zeal is not included; prayer unlocks (Piety, Rigour, Auguryâ€¦) cannot be read and are assumed
   when your Prayer level allows them â€” change the prayer under *Assumptions* if you have not unlocked it.
